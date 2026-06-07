@@ -1,7 +1,7 @@
 # replay-parser-2 - GSD New Project Brief
 
 **Created:** 2026-04-24  
-**Intended command:** `$gsd-new-project --auto @/home/afgan0r/Projects/SolidGames/plans/replay-parser-2/briefs/replay-parser-2.md`
+**Intended command:** `$gsd-new-project --auto @../plans/replay-parser-2/briefs/replay-parser-2.md`
 **Application:** `replay-parser-2`
 
 This document initializes the Rust replay parsing application only. It is one part of the Solid Stats product alongside `replays-fetcher`, `server-2`, and `web`.

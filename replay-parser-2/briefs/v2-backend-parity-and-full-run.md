@@ -1,7 +1,7 @@
 # replay-parser-2 v2 Milestone Brief: Parser Contract Support for Backend Parity
 
 **Created:** 2026-05-12
-**Intended command:** `$gsd-new-milestone --auto @/home/afgan0r/Projects/SolidGames/plans/replay-parser-2/briefs/v2-backend-parity-and-full-run.md` only if contract support is needed
+**Intended command:** `$gsd-new-milestone --auto @../plans/replay-parser-2/briefs/v2-backend-parity-and-full-run.md` only if contract support is needed
 **Application:** `replay-parser-2`
 **Primary role:** conditional support dependency
 
@@ -9,10 +9,10 @@
 
 Read these sibling briefs before drafting any parser milestone:
 
-- `/home/afgan0r/Projects/SolidGames/plans/server-2/briefs/v2-backend-parity-and-full-run.md`
-- `/home/afgan0r/Projects/SolidGames/plans/replays-fetcher/briefs/v2-backend-parity-and-full-run.md`
-- `/home/afgan0r/Projects/SolidGames/plans/infrastructure/briefs/v2-backend-parity-and-full-run.md`
-- `/home/afgan0r/Projects/SolidGames/plans/web/briefs/v2-backend-parity-and-full-run.md`
+- `plans/server-2/briefs/v2-backend-parity-and-full-run.md`
+- `plans/replays-fetcher/briefs/v2-backend-parity-and-full-run.md`
+- `plans/infrastructure/briefs/v2-backend-parity-and-full-run.md`
+- `plans/web/briefs/v2-backend-parity-and-full-run.md`
 
 ## Global Sequence
 
@@ -31,13 +31,13 @@ The key parser obligation is to keep compact player counters and kill rows deter
 
 ## Source Evidence
 
-- `/home/afgan0r/Projects/SolidGames/replay-parser-2/.planning/STATE.md`
-- `/home/afgan0r/Projects/SolidGames/replay-parser-2/.planning/quick/260502-k2u-old-new-year-edge-parity/SUMMARY.md`
-- `/home/afgan0r/Projects/SolidGames/replay-parser-2/.planning/quick/260502-nx9-old-new-year-edge-parity-second-sample/SUMMARY.md`
+- `replay-parser-2/.planning/STATE.md`
+- `replay-parser-2/.planning/quick/260502-k2u-old-new-year-edge-parity/SUMMARY.md`
+- `replay-parser-2/.planning/quick/260502-nx9-old-new-year-edge-parity-second-sample/SUMMARY.md`
 - `crates/parser-contract/src/minimal.rs`
 - `crates/parser-core/tests/combat_event_semantics.rs`
 - `crates/parser-core/tests/aggregate_projection.rs`
-- `/home/afgan0r/Projects/SolidGames/plans/server-2/briefs/v2-backend-parity-and-full-run.md`
+- `plans/server-2/briefs/v2-backend-parity-and-full-run.md`
 
 ## Required Decisions Already Made
 

@@ -1,7 +1,7 @@
 # server-2 v2 Milestone Brief: Backend Parity and Full-Run Readiness
 
 **Created:** 2026-05-12
-**Intended command:** `$gsd-new-milestone --auto @/home/afgan0r/Projects/SolidGames/plans/server-2/briefs/v2-backend-parity-and-full-run.md`
+**Intended command:** `$gsd-new-milestone --auto @../plans/server-2/briefs/v2-backend-parity-and-full-run.md`
 **Application:** `server-2`
 **Primary role:** first implementation milestone in the cross-app sequence
 
@@ -9,10 +9,10 @@
 
 Read these sibling briefs before drafting the milestone:
 
-- `/home/afgan0r/Projects/SolidGames/plans/replays-fetcher/briefs/v2-backend-parity-and-full-run.md`
-- `/home/afgan0r/Projects/SolidGames/plans/replay-parser-2/briefs/v2-backend-parity-and-full-run.md`
-- `/home/afgan0r/Projects/SolidGames/plans/infrastructure/briefs/v2-backend-parity-and-full-run.md`
-- `/home/afgan0r/Projects/SolidGames/plans/web/briefs/v2-backend-parity-and-full-run.md`
+- `plans/replays-fetcher/briefs/v2-backend-parity-and-full-run.md`
+- `plans/replay-parser-2/briefs/v2-backend-parity-and-full-run.md`
+- `plans/infrastructure/briefs/v2-backend-parity-and-full-run.md`
+- `plans/web/briefs/v2-backend-parity-and-full-run.md`
 
 ## Global Sequence
 
@@ -31,13 +31,13 @@ The first milestone is not "build web". It is "make the backend explain and expo
 
 ## Source Evidence
 
-- `/home/afgan0r/Projects/SolidGames/server-2/.planning/research/v2-full-run-findings.md`
-- `/home/afgan0r/Projects/SolidGames/server-2/.planning/debug/no-steamid-name-stats.md`
+- `server-2/.planning/research/v2-full-run-findings.md`
+- `server-2/.planning/debug/no-steamid-name-stats.md`
 - `docs/api-compatibility.md`
 - `openapi/server-2.openapi.json`
-- `/home/afgan0r/Projects/SolidGames/infrastructure/docs/diff-readiness.md`
-- `/home/afgan0r/Projects/SolidGames/replay-parser-2/.planning/quick/260502-k2u-old-new-year-edge-parity/SUMMARY.md`
-- `/home/afgan0r/Projects/SolidGames/replay-parser-2/.planning/quick/260502-nx9-old-new-year-edge-parity-second-sample/SUMMARY.md`
+- `infrastructure/docs/diff-readiness.md`
+- `replay-parser-2/.planning/quick/260502-k2u-old-new-year-edge-parity/SUMMARY.md`
+- `replay-parser-2/.planning/quick/260502-nx9-old-new-year-edge-parity-second-sample/SUMMARY.md`
 
 ## Required Decisions Already Made
 
@@ -128,4 +128,4 @@ Acceptance criteria:
 
 ## Recommended Next Command
 
-Run `$gsd-new-milestone --auto @/home/afgan0r/Projects/SolidGames/plans/server-2/briefs/v2-backend-parity-and-full-run.md` in `server-2` first.
+Run `$gsd-new-milestone --auto @../plans/server-2/briefs/v2-backend-parity-and-full-run.md` in `server-2` first.

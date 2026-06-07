@@ -1,7 +1,7 @@
 # server-2 - GSD New Project Brief
 
 **Created:** 2026-04-24  
-**Intended command:** `$gsd-new-project --auto @/home/afgan0r/Projects/SolidGames/plans/server-2/briefs/server-2.md`  
+**Intended command:** `$gsd-new-project --auto @../plans/server-2/briefs/server-2.md`  
 **Application:** `server-2`
 
 This document initializes the TypeScript backend application for Solid Stats. It is one part of the product alongside `replays-fetcher`, `replay-parser-2`, and `web`.

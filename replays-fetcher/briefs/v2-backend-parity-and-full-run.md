@@ -1,7 +1,7 @@
 # replays-fetcher v2 Milestone Brief: Full-Corpus Ingest Resilience
 
 **Created:** 2026-05-12
-**Intended command:** `$gsd-new-milestone --auto @/home/afgan0r/Projects/SolidGames/plans/replays-fetcher/briefs/v2-backend-parity-and-full-run.md`
+**Intended command:** `$gsd-new-milestone --auto @../plans/replays-fetcher/briefs/v2-backend-parity-and-full-run.md`
 **Application:** `replays-fetcher`
 **Primary role:** second implementation milestone in the cross-app sequence
 
@@ -9,10 +9,10 @@
 
 Read these sibling briefs before drafting the milestone:
 
-- `/home/afgan0r/Projects/SolidGames/plans/server-2/briefs/v2-backend-parity-and-full-run.md`
-- `/home/afgan0r/Projects/SolidGames/plans/replay-parser-2/briefs/v2-backend-parity-and-full-run.md`
-- `/home/afgan0r/Projects/SolidGames/plans/infrastructure/briefs/v2-backend-parity-and-full-run.md`
-- `/home/afgan0r/Projects/SolidGames/plans/web/briefs/v2-backend-parity-and-full-run.md`
+- `plans/server-2/briefs/v2-backend-parity-and-full-run.md`
+- `plans/replay-parser-2/briefs/v2-backend-parity-and-full-run.md`
+- `plans/infrastructure/briefs/v2-backend-parity-and-full-run.md`
+- `plans/web/briefs/v2-backend-parity-and-full-run.md`
 
 ## Global Sequence
 
@@ -31,12 +31,12 @@ The output of this milestone is durable full-run input for `server-2` parity and
 
 ## Source Evidence
 
-- `/home/afgan0r/Projects/SolidGames/replays-fetcher/.planning/research/v2-full-run-findings.md`
-- `/home/afgan0r/Projects/SolidGames/replays-fetcher/.planning/quick/260511-stream-full-run-pages.md`
-- `/home/afgan0r/Projects/SolidGames/replays-fetcher/README.md`
-- `/home/afgan0r/Projects/SolidGames/server-2/.planning/research/v2-full-run-findings.md`
-- `/home/afgan0r/Projects/SolidGames/infrastructure/docs/full-run.md`
-- `/home/afgan0r/Projects/SolidGames/infrastructure/docs/diff-readiness.md`
+- `replays-fetcher/.planning/research/v2-full-run-findings.md`
+- `replays-fetcher/.planning/quick/260511-stream-full-run-pages.md`
+- `replays-fetcher/README.md`
+- `server-2/.planning/research/v2-full-run-findings.md`
+- `infrastructure/docs/full-run.md`
+- `infrastructure/docs/diff-readiness.md`
 
 ## Required Decisions Already Made
 

@@ -42,13 +42,17 @@ product/            cross-project docs (release plan, cutover review, …)
   `briefs/`. Do not scatter copies into sibling repos — that is exactly the
   drift this repo consolidated. Earlier per-repo copies were stale (superseded
   04-2026 snapshots); the authoritative versions are here.
-- **Reference by absolute path.** When a brief points at another brief or at a
-  repo's `.planning/`/`README.md`, use a full
-  `/home/afgan0r/Projects/SolidGames/...` path so it resolves regardless of cwd.
+- **No machine-revealing paths.** Never put absolute paths that contain a
+  username or home dir (e.g. `/home/<user>/...`), hostnames, or IPs into any
+  committed file. To point at another brief or a repo file, name the repo plus
+  the path within it (e.g. the `infrastructure` repo's `docs/staging.md`, or a
+  repo-relative `infrastructure/docs/staging.md`). Within `plans`, link
+  relatively (e.g. `product/RELEASE-PLAN.md`).
 - **New briefs** go in `<repo>/briefs/`. New cross-project plans go in
   `product/`.
-- A brief's `Intended command` should reference its current absolute location
-  here, e.g. `--auto @/home/afgan0r/Projects/SolidGames/plans/<repo>/briefs/<file>.md`.
+- A brief's `Intended command` should reference the brief in the `plans` repo
+  without an absolute path — e.g. from a sibling repo,
+  `--auto @../plans/<repo>/briefs/<file>.md`.
 
 ## Working in the product repos
 

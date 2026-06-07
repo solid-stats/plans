@@ -1,7 +1,7 @@
 # infrastructure v2 Milestone Brief: Controlled Full Run, Evidence, and Observability
 
 **Created:** 2026-05-12
-**Intended command:** `$gsd-new-milestone --auto @/home/afgan0r/Projects/SolidGames/plans/infrastructure/briefs/v2-backend-parity-and-full-run.md`
+**Intended command:** `$gsd-new-milestone --auto @../plans/infrastructure/briefs/v2-backend-parity-and-full-run.md`
 **Application:** `infrastructure`
 **Primary role:** third implementation milestone in the cross-app sequence
 
@@ -9,10 +9,10 @@
 
 Read these sibling briefs before drafting the milestone:
 
-- `/home/afgan0r/Projects/SolidGames/plans/server-2/briefs/v2-backend-parity-and-full-run.md`
-- `/home/afgan0r/Projects/SolidGames/plans/replays-fetcher/briefs/v2-backend-parity-and-full-run.md`
-- `/home/afgan0r/Projects/SolidGames/plans/replay-parser-2/briefs/v2-backend-parity-and-full-run.md`
-- `/home/afgan0r/Projects/SolidGames/plans/web/briefs/v2-backend-parity-and-full-run.md`
+- `plans/server-2/briefs/v2-backend-parity-and-full-run.md`
+- `plans/replays-fetcher/briefs/v2-backend-parity-and-full-run.md`
+- `plans/replay-parser-2/briefs/v2-backend-parity-and-full-run.md`
+- `plans/web/briefs/v2-backend-parity-and-full-run.md`
 
 ## Global Sequence
 
@@ -31,15 +31,15 @@ This milestone should not decide statistics semantics. It should make the run re
 
 ## Source Evidence
 
-- `/home/afgan0r/Projects/SolidGames/infrastructure/.planning/STATE.md`
-- `/home/afgan0r/Projects/SolidGames/infrastructure/docs/full-run.md`
-- `/home/afgan0r/Projects/SolidGames/infrastructure/docs/diff-readiness.md`
-- `/home/afgan0r/Projects/SolidGames/plans/infrastructure/briefs/observability-plan.md`
-- `/home/afgan0r/Projects/SolidGames/infrastructure/docs/staging.md`
-- `/home/afgan0r/Projects/SolidGames/infrastructure/k8s/staging/`
-- `/home/afgan0r/Projects/SolidGames/infrastructure/scripts/start-controlled-full-run.sh`
-- `/home/afgan0r/Projects/SolidGames/server-2/.planning/research/v2-full-run-findings.md`
-- `/home/afgan0r/Projects/SolidGames/replays-fetcher/.planning/research/v2-full-run-findings.md`
+- `infrastructure/.planning/STATE.md`
+- `infrastructure/docs/full-run.md`
+- `infrastructure/docs/diff-readiness.md`
+- `plans/infrastructure/briefs/observability-plan.md`
+- `infrastructure/docs/staging.md`
+- `infrastructure/k8s/staging/`
+- `infrastructure/scripts/start-controlled-full-run.sh`
+- `server-2/.planning/research/v2-full-run-findings.md`
+- `replays-fetcher/.planning/research/v2-full-run-findings.md`
 
 ## Required Decisions Already Made
 
@@ -104,7 +104,7 @@ Goal: operators can see enough runtime health to trust the run before full obser
 Acceptance criteria:
 
 - Surface workload logs, queue depth, parser job outcomes, fetcher progress, server recalculation status, and backup status in a repeatable way.
-- Keep full Grafana/Loki/GlitchTip rollout aligned with `/home/afgan0r/Projects/SolidGames/plans/infrastructure/briefs/observability-plan.md`, but do not let it block the core parity run unless the run cannot be diagnosed without it.
+- Keep full Grafana/Loki/GlitchTip rollout aligned with `plans/infrastructure/briefs/observability-plan.md`, but do not let it block the core parity run unless the run cannot be diagnosed without it.
 - No secret values appear in rendered manifests, logs, dashboards, or committed evidence.
 
 ## Dependencies On Other Apps

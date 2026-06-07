@@ -43,7 +43,7 @@ Reliably discover and stage new replay files without corrupting `server-2` busin
 
 - Runtime: TypeScript.
 - Execution: scheduled `run-once` job for v1.
-- GSD config: `/home/afgan0r/Projects/SolidGames/replays-fetcher/.planning/config.json` must match `replay-parser-2` exactly unless a product-wide GSD config change updates both.
+- GSD config: `replays-fetcher/.planning/config.json` must match `replay-parser-2` exactly unless a product-wide GSD config change updates both.
 - Storage: S3-compatible storage, one bucket with separate prefixes.
 - Raw prefix: `raw/`.
 - Parser artifact prefix: `artifacts/`, but written by `replay-parser-2`, not by this service.
