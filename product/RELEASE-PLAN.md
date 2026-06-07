@@ -63,8 +63,11 @@ Not part of the `server-2` API milestone, but required before going live.
    [replays-fetcher brief](../replays-fetcher/briefs/v2-backend-parity-and-full-run.md).
 3. **infrastructure** — controlled full run, legacy snapshot, diff/parity
    evidence, and a real production environment: production namespace (only
-   staging exists today), monitoring, validated backups, and rollback. See
-   [infrastructure brief](../infrastructure/briefs/v2-backend-parity-and-full-run.md).
+   staging exists today), monitoring, validated backups, and rollback. The
+   staging observability stack (Grafana / Prometheus / Loki + GlitchTip for
+   Sentry-compatible error tracking) is specced but not started — see
+   [observability plan](../infrastructure/briefs/observability-plan.md). See also
+   the [infrastructure brief](../infrastructure/briefs/v2-backend-parity-and-full-run.md).
 
 ## Release criteria — both tracks converge
 

@@ -32,12 +32,12 @@ This milestone should not decide statistics semantics. It should make the run re
 ## Source Evidence
 
 - `/home/afgan0r/Projects/SolidGames/infrastructure/.planning/STATE.md`
-- `docs/full-run.md`
-- `docs/diff-readiness.md`
-- `docs/observability-plan.md`
-- `docs/staging.md`
-- `k8s/staging/`
-- `scripts/start-controlled-full-run.sh`
+- `/home/afgan0r/Projects/SolidGames/infrastructure/docs/full-run.md`
+- `/home/afgan0r/Projects/SolidGames/infrastructure/docs/diff-readiness.md`
+- `/home/afgan0r/Projects/SolidGames/plans/infrastructure/briefs/observability-plan.md`
+- `/home/afgan0r/Projects/SolidGames/infrastructure/docs/staging.md`
+- `/home/afgan0r/Projects/SolidGames/infrastructure/k8s/staging/`
+- `/home/afgan0r/Projects/SolidGames/infrastructure/scripts/start-controlled-full-run.sh`
 - `/home/afgan0r/Projects/SolidGames/server-2/.planning/research/v2-full-run-findings.md`
 - `/home/afgan0r/Projects/SolidGames/replays-fetcher/.planning/research/v2-full-run-findings.md`
 
@@ -104,7 +104,7 @@ Goal: operators can see enough runtime health to trust the run before full obser
 Acceptance criteria:
 
 - Surface workload logs, queue depth, parser job outcomes, fetcher progress, server recalculation status, and backup status in a repeatable way.
-- Keep full Grafana/Loki/GlitchTip rollout aligned with `docs/observability-plan.md`, but do not let it block the core parity run unless the run cannot be diagnosed without it.
+- Keep full Grafana/Loki/GlitchTip rollout aligned with `/home/afgan0r/Projects/SolidGames/plans/infrastructure/briefs/observability-plan.md`, but do not let it block the core parity run unless the run cannot be diagnosed without it.
 - No secret values appear in rendered manifests, logs, dashboards, or committed evidence.
 
 ## Dependencies On Other Apps
