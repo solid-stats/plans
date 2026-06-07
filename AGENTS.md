@@ -1,0 +1,57 @@
+# AGENTS instructions
+
+## What this repository is
+
+`plans` is the central home for **product-level and strategic planning** of the
+Solid Stats product. It holds cross-project plans and the per-application
+**milestone/app briefs**. It is documentation, not code.
+
+Solid Stats is a multi-project product (each is its own git repository under
+`~/Projects/SolidGames`):
+
+- `replay-parser-2` — Rust OCAP parser.
+- `replays-fetcher` — replay discovery + raw S3 staging.
+- `server-2` — PostgreSQL source of truth, APIs, identity, moderation, jobs.
+- `web` — browser UI.
+- `infrastructure` — deploy/run/ops.
+
+## Boundary: what lives here vs. in each repo
+
+- **Here (`plans`):** cross-project strategy (`product/`) and each app's briefs
+  (`<repo>/briefs/`).
+- **NOT here:** the per-repo GSD operational state. Each project keeps its own
+  `.planning/` (PROJECT/REQUIREMENTS/ROADMAP/STATE, phases, milestones,
+  research, etc.) **inside that project repo**. GSD commands read and write
+  `.planning/` relative to the project root, so it must stay there.
+
+This repository is **not a GSD project** — it has no `.planning/` of its own.
+
+## Structure
+
+```
+product/            cross-project docs (release plan, cutover review, …)
+<repo>/briefs/      that repo's app brief + milestone briefs
+```
+
+- `<repo>/briefs/<repo>.md` — the app brief (one canonical copy per app).
+- `<repo>/briefs/<milestone>.md` — milestone briefs, distinct per repo.
+
+## Conventions
+
+- **One canonical copy.** An app brief lives once, under its own app's
+  `briefs/`. Do not scatter copies into sibling repos — that is exactly the
+  drift this repo consolidated. Earlier per-repo copies were stale (superseded
+  04-2026 snapshots); the authoritative versions are here.
+- **Reference by absolute path.** When a brief points at another brief or at a
+  repo's `.planning/`/`README.md`, use a full
+  `/home/afgan0r/Projects/SolidGames/...` path so it resolves regardless of cwd.
+- **New briefs** go in `<repo>/briefs/`. New cross-project plans go in
+  `product/`.
+- A brief's `Intended command` should reference its current absolute location
+  here, e.g. `--auto @/home/afgan0r/Projects/SolidGames/plans/<repo>/briefs/<file>.md`.
+
+## Working in the product repos
+
+When planning or executing in a project repo, that repo's `gsd-briefs/` now
+contains only a pointer; read the real briefs here and that repo's own
+`.planning/` for operational state.
