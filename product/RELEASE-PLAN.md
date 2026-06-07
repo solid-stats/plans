@@ -69,6 +69,30 @@ Not part of the `server-2` API milestone, but required before going live.
    [observability plan](../infrastructure/briefs/observability-plan.md). See also
    the [infrastructure brief](../infrastructure/briefs/v2-backend-parity-and-full-run.md).
 
+## Track C — Engineering hardening (pre-release)
+
+Not feature work, but required before release so the codebase ships clean and
+consistent. Applies to all TS repos (`replays-fetcher`, `server-2`, `web`).
+
+1. **Repository cleanup** — remove dead code, stale TODO/FIXME, unused config and
+   scripts, redundant `eslint-disable`/suppressions; tighten ignores; ensure each
+   repo's `verify` pipeline is green from a clean checkout.
+2. **Refactor to the convention skills** — bring each repo into compliance with the
+   shared review/convention skills (`estesis-process-review-standards` and the
+   per-stack reviewers, e.g. `estesis-backend-vc-code-review`). Resolve the findings
+   so the conventions hold uniformly across repos.
+3. **Migrate to the Vite+ ecosystem** — converge all TS products onto the VoidZero/
+   Vite+ toolchain (Oxlint + Oxfmt + Vitest + tsdown; Vite+ for `web`), with a shared
+   `@solidstats/config` preset and the `vocalclub` config as the rule-content
+   reference. Full decision pack, risks, and open questions in
+   [TS-TOOLCHAIN-CONVERGENCE.md](TS-TOOLCHAIN-CONVERGENCE.md). Recommended start:
+   a spike on `replays-fetcher` (port rules → Oxlint preset, check Oxfmt diff,
+   tsdown build).
+
+Sequencing note: Track C runs after the Track A contract freeze settles per repo —
+toolchain churn during active API work would create noise — but must complete
+before the production cutover.
+
 ## Release criteria — both tracks converge
 
 Solid Stats 2 is releasable when:
@@ -79,6 +103,8 @@ Solid Stats 2 is releasable when:
    parity gate.
 3. **Production:** it all runs on a real production environment with monitoring,
    validated backups, and a rollback path.
+4. **Track C:** repos cleaned, brought into convention-skill compliance, and
+   converged onto the Vite+ ecosystem (shared `@solidstats/config`).
 
 ## Cross-references
 
