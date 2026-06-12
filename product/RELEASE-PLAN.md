@@ -154,5 +154,7 @@ Solid Stats 2 is releasable when:
 ## Cross-references
 
 - Per-repo operational state lives in each repo's own `.planning/`.
-- [V2-CUTOVER-REVIEW.md](V2-CUTOVER-REVIEW.md) — full gap analysis and the
-  locked v1 backend scope decisions (2026-05-31).
+- [V2-CUTOVER-REVIEW.md](../archive/product/V2-CUTOVER-REVIEW.md) — **archived**
+  (delivered as server-2 v3.0, 2026-06-08); kept as the historical gap analysis
+  and the locked v1 backend scope decisions (2026-05-31). See the
+  [archive index](../archive/README.md).

@@ -9,14 +9,14 @@
 
 Read these sibling briefs before drafting the milestone:
 
-- `plans/server-2/briefs/v2-backend-parity-and-full-run.md`
+- `plans/archive/server-2/briefs/v2-backend-parity-and-full-run.md` (archived — shipped as server-2 v2.0)
 - `plans/replays-fetcher/briefs/v2-backend-parity-and-full-run.md`
-- `plans/replay-parser-2/briefs/v2-backend-parity-and-full-run.md`
+- `plans/archive/replay-parser-2/briefs/v2-backend-parity-and-full-run.md` (archived — conditional brief, never triggered)
 - `plans/infrastructure/briefs/v2-backend-parity-and-full-run.md`
 
 ## Global Sequence
 
-1. `server-2`: prove public statistics semantics, export, recalculation, and API shape.
+1. `server-2`: prove public statistics semantics, export, recalculation, and API shape. **✅ shipped (v2.0; Public API frozen at v3.0, 2026-06-08).**
 2. `replays-fetcher`: make the full corpus available reliably.
 3. `infrastructure`: run the full corpus and old-vs-new diff gate.
 4. `web`: build the user experience on top of trusted backend data.
@@ -32,7 +32,7 @@ The immediate next step for `web` is not a full UI implementation. It is to cons
 ## Source Evidence
 
 - `plans/web/briefs/web.md`
-- `plans/server-2/briefs/v2-backend-parity-and-full-run.md`
+- `plans/archive/server-2/briefs/v2-backend-parity-and-full-run.md` (archived — shipped as server-2 v2.0)
 - `server-2/openapi/server-2.openapi.json`
 - `server-2/docs/api-compatibility.md`
 - `infrastructure/docs/diff-readiness.md`

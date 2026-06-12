@@ -10,12 +10,13 @@ GSD operational state stays inside each project repo's own `.planning/`.
 
 | Path | Contents |
 |------|----------|
-| `product/` | Cross-project plans: [RELEASE-PLAN.md](product/RELEASE-PLAN.md), [V2-CUTOVER-REVIEW.md](product/V2-CUTOVER-REVIEW.md) |
-| `replay-parser-2/briefs/` | Parser app brief + milestone briefs |
+| `product/` | Cross-project plans (entry point: [RELEASE-PLAN.md](product/RELEASE-PLAN.md)) |
+| `replay-parser-2/briefs/` | Parser app brief |
 | `replays-fetcher/briefs/` | Fetcher app brief + milestone briefs |
-| `server-2/briefs/` | Backend app brief + milestone briefs |
-| `web/briefs/` | Web app brief + milestone briefs |
+| `server-2/briefs/` | Backend app brief |
+| `web/briefs/` | Web app brief + milestone brief |
 | `infrastructure/briefs/` | Infrastructure milestone briefs |
+| `archive/` | Superseded docs, kept for provenance ([archive/README.md](archive/README.md)) |
 
 ## What is NOT here
 

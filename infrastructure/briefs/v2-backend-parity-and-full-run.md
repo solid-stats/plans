@@ -9,19 +9,19 @@
 
 Read these sibling briefs before drafting the milestone:
 
-- `plans/server-2/briefs/v2-backend-parity-and-full-run.md`
+- `plans/archive/server-2/briefs/v2-backend-parity-and-full-run.md` (archived — shipped as server-2 v2.0)
 - `plans/replays-fetcher/briefs/v2-backend-parity-and-full-run.md`
-- `plans/replay-parser-2/briefs/v2-backend-parity-and-full-run.md`
+- `plans/archive/replay-parser-2/briefs/v2-backend-parity-and-full-run.md` (archived — conditional brief, never triggered)
 - `plans/web/briefs/v2-backend-parity-and-full-run.md`
 
 ## Global Sequence
 
-1. `server-2`: parity foundation, new-stat export, recalculation report, and diff contract.
+1. `server-2`: parity foundation, new-stat export, recalculation report, and diff contract. **✅ shipped (v2.0).**
 2. `replays-fetcher`: resumable full-corpus ingest.
 3. `infrastructure`: controlled run orchestration, legacy snapshot, evidence storage, and runtime observability.
 4. `web`: UI implementation after backend parity and API stability.
 
-`replay-parser-2` changes are conditional and should be driven by `server-2` contract findings.
+`replay-parser-2` changes are conditional and should be driven by `server-2` contract findings — none arose; the parser is **DONE/verified**.
 
 ## Goal
 

@@ -1,5 +1,13 @@
 # replay-parser-2 v2 Milestone Brief: Parser Contract Support for Backend Parity
 
+> **ARCHIVED 2026-06-13 — moot, do not plan against this.**
+> A *conditional* support brief: it was to be activated only if `server-2` parity
+> work hit a parser contract blocker (missing/ambiguous compact counter, uncovered
+> edge case, schema/worker change). That trigger **never fired** — server-2 parity
+> shipped (v2.0) against the existing parser artifact contract, and `replay-parser-2`
+> is **DONE / user-verified**. Kept for provenance. **Current status:**
+> `product/RELEASE-PLAN.md`.
+
 **Created:** 2026-05-12
 **Intended command:** `$gsd-new-milestone --auto @../plans/replay-parser-2/briefs/v2-backend-parity-and-full-run.md` only if contract support is needed
 **Application:** `replay-parser-2`

@@ -1,5 +1,13 @@
 # SolidStats backend (server-2) — Finish & Freeze v1 plan
 
+> **ARCHIVED 2026-06-13 — superseded, do not plan against this.**
+> This "Finish & Freeze v1" plan (2026-05-31) was fully delivered: the public API
+> it scoped (A–G) shipped as **server-2 v3.0 "Public API v1" — complete & archived
+> 2026-06-08**, including the OpenAPI `1.0.0` contract freeze (phase 19). Its locked
+> v1 decisions (cursor pagination, server-side SteamID masking, slug→id, hybrid
+> request model) now live in shipped code. Kept only as the historical gap-analysis
+> the release plan points back to. **Current status:** `product/RELEASE-PLAN.md`.
+
 **Date:** 2026-05-31
 **Goal:** finish the `server-2` public API and freeze its OpenAPI contract so the `web` frontend (which generates its client from that OpenAPI) can be built against it.
 **Context:** SolidGames is a grouping of separate projects forming the SolidStats product (not a monorepo). v2 is a deliberate redesign, verified against legacy. `replay-parser-2` is DONE/verified. `server-2` is high-quality code (no prod stubs, ~197 unit tests green, OpenAPI no drift) but its **public contract is scope-incomplete** vs the `web` brief.

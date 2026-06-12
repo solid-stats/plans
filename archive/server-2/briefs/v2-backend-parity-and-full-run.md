@@ -1,5 +1,13 @@
 # server-2 v2 Milestone Brief: Backend Parity and Full-Run Readiness
 
+> **ARCHIVED 2026-06-13 — delivered, do not plan against this.**
+> This milestone shipped as **server-2 v2.0**: phases 1–5 here (parser-counter
+> ingestion, full-run recalculation/coverage report, rotation & no-SteamID
+> readiness, legacy public export contract, diff-harness contract) all landed.
+> The live milestone state lives in **server-2's own `.planning/`**; this file was
+> only the `gsd-new-milestone` input and has served its purpose. Kept for
+> provenance. **Current status:** `product/RELEASE-PLAN.md` (Track B).
+
 **Created:** 2026-05-12
 **Intended command:** `$gsd-new-milestone --auto @../plans/server-2/briefs/v2-backend-parity-and-full-run.md`
 **Application:** `server-2`
