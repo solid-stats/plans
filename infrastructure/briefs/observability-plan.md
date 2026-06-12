@@ -5,6 +5,14 @@ is a planning document, not an implementation runbook. The first reader should
 be able to understand the target architecture, what is intentionally in scope,
 what is deferred, and how to start implementation safely.
 
+> **Update 2026-06-12 (decision D2).** The first version below remains
+> **staging-first**, but production observability is **no longer deferred
+> indefinitely**: per the pre-prod decision (see `product/RELEASE-PLAN.md`), the
+> full stack must be **live on production before the backend takes traffic**.
+> The path is staging-first → validate → **mirror the config to a production
+> namespace**. See [Production mirror](#production-mirror-d2) for the net-new
+> prod scope this adds.
+
 ## Goal
 
 Add full self-hosted observability for the staging k3s environment:
@@ -65,7 +73,9 @@ In scope:
 
 Out of scope for the first version:
 
-- Production observability.
+- Production observability — **scoped, not abandoned.** The first version stays
+  staging-only; production rollout is handled as a follow-on mirror, see
+  [Production mirror](#production-mirror-d2).
 - Production traffic cutover.
 - Long-term backups for metrics, logs, or error events.
 - External alert delivery through Telegram, Discord, Slack, or email.
@@ -104,9 +114,43 @@ Out of scope for the first version:
 - No secret values should be visible in rendered manifests, logs, dashboards, or
   committed documentation.
 
+## Production mirror (D2)
+
+Added 2026-06-12. The staging stack above ships first; production observability
+is then brought up by **mirroring the validated staging config into a production
+namespace**, and it must be live and validated **before the backend takes
+production traffic**. Reuse, do not redesign — the staging Helm values, rendered
+manifests, dashboards, and exporter wiring are the source artifacts.
+
+What is genuinely net-new for the production mirror (not covered by the
+staging-only first version):
+
+- **Production sizing.** Re-do the resource preflight against the production VPS;
+  staging CPU/memory/disk/storage-class numbers do not transfer.
+- **Retention.** Pick production Loki / Prometheus retention deliberately
+  (staging's ~7–14 day Loki window is a staging default, not a prod policy).
+- **Observability-data backups.** Staging explicitly treats obs data as
+  disposable ("can be lost and rebuilt"); decide what — if anything — is backed
+  up in production (dashboards/config at minimum; metrics/logs/error history TBD).
+- **Production domains + auth.** Production hostnames for Grafana/GlitchTip; local
+  users carry over for v1 (OAuth/SSO still out of scope unless revisited).
+- **Production secrets** sourced from the production environment, rendered into
+  the production namespace — same model as staging, distinct values.
+- **Edge/TLS ownership** on the production host (the same open question as
+  staging, answered separately for prod).
+
+Out of scope even for the mirror (still deferred): external alert delivery,
+traces/APM/session replay, GlitchTip application-log ingestion, OAuth/SSO.
+
+Sequencing: this mirror is part of the `infrastructure` v2 production-readiness
+work. The full stack (metrics + logs + error tracking) is required on production
+before traffic; it is **not** reduced to the parity-critical visibility subset.
+
 ## Open Questions
 
 - Which public edge layer will own TLS and routing after discovery?
+- For the production mirror: what production sizing, retention, and
+  obs-data-backup policy apply, and which host/edge owns production TLS?
 - What exact CPU, memory, disk, and retention limits fit the staging VPS?
 - Which sibling application repositories are present locally when the SDK PRs
   are prepared?
