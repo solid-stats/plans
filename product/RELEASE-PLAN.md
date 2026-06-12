@@ -112,6 +112,19 @@ consistent. Applies to all TS repos (`replays-fetcher`, `server-2`, `web`).
    [TS-TOOLCHAIN-CONVERGENCE.md](TS-TOOLCHAIN-CONVERGENCE.md). Recommended start:
    a spike on `replays-fetcher` (port rules → Oxlint preset, check Oxfmt diff,
    tsdown build).
+4. **Git hooks — local pre-commit / pre-push gates** — wire client-side hooks in
+   every TS repo so the toolchain runs before code leaves a developer's machine,
+   not just in CI. **pre-commit:** Oxfmt + Oxlint on staged files only (fast,
+   incremental); **pre-push:** the fuller gate — `tsc` typecheck + Vitest (the
+   slow checks belong on push, not on every commit). Manager: **lefthook** (single
+   Rust-free Go binary, parallel runs, native staged-file globbing — fits the
+   Oxc/fast-tooling theme and the polyrepo layout better than husky + lint-staged).
+   Hook config is shared via `@solidstats/config` (a checked-in `lefthook.yml`
+   preset) so the rules don't drift per repo, same as the lint/format presets.
+   Hooks mirror — never replace — the CI `verify` pipeline (CI stays the hard
+   gate; hooks are the fast local pre-filter, bypassable with `--no-verify` for
+   WIP). Lands per repo right after that repo's Oxlint/Oxfmt migration (item 3),
+   since the hooks just invoke the new command surface.
 
 Sequencing note: Track C runs after the Track A contract freeze settles per repo —
 toolchain churn during active API work would create noise — but **must complete
@@ -133,9 +146,10 @@ Solid Stats 2 is releasable when:
    parity gate.
 3. **Production:** it all runs on a real production environment with the full
    observability stack live on production before traffic (D2), validated backups
-   + restore drill, and a rollback path.
-4. **Track C:** repos cleaned, brought into convention-skill compliance, and
-   converged onto the Vite+ ecosystem (shared `@solidstats/config`).
+   - restore drill, and a rollback path.
+4. **Track C:** repos cleaned, brought into convention-skill compliance,
+   converged onto the Vite+ ecosystem (shared `@solidstats/config`), and guarded
+   by shared pre-commit / pre-push git hooks (lefthook) that mirror CI `verify`.
 
 ## Cross-references
 

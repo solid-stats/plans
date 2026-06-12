@@ -32,6 +32,12 @@ single source of truth for shared config, so the stack does not drift again
 - Vite Task as a unified task runner across repos.
 - CI caching for Oxc/Vitest.
 
+### Also In Scope (Track C item 4)
+- Client-side git hooks via **lefthook**, config shipped in `@solidstats/config`
+  (`lefthook.yml` preset): **pre-commit** = Oxfmt + Oxlint on staged files;
+  **pre-push** = `tsc` typecheck + Vitest. Hooks invoke the same command surface
+  this migration introduces and mirror (not replace) the CI `verify` gate.
+
 ### Non Goals
 - Monorepo. Polyrepo structure (separate git repos + own `.planning/`) is kept.
 - Rewriting `server-2` OpenAPI tooling (`@fastify/swagger`, `openapi-typescript`)
