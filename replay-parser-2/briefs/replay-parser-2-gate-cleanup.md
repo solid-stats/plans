@@ -1,5 +1,14 @@
 # replay-parser-2 — Gate-Cleanup Follow-Up (code-side)
 
+> **STATUS 2026-06-14 (triage) — PARTIAL; headline risk LIVE, deferred to the parser refactor.**
+> Done: §A test-module dead-suppression cleanup largely landed (9→1).
+> **LIVE / not started:** **§C — `coverage/allowlist.toml` has 14 entries ALL EXPIRED
+> (`expires = "2026-05-28"`) and the CI coverage gate is unwired** (`cd.yml` runs only
+> fmt / clippy `-D warnings` / `cargo test`; no `coverage-gate.sh` / `COVERAGE_ALLOW_HEAVY`)
+> → the strict coverage gate is effectively OFF; §A `[workspace.lints.clippy]` config-once
+> promotion is undone; §B `too_many_lines` split undone. Revalidate the allowlist + wire the
+> gate as part of the parser refactor (per owner: not now).
+
 **Created:** 2026-06-13
 **Application:** `replay-parser-2`
 **Status:** §C is a live risk (act now); §A and §B are non-blocking, do over time.

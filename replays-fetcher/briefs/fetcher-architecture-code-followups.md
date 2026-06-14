@@ -1,5 +1,12 @@
 # replays-fetcher — Architecture Code Follow-ups (skill-driven, lands in the fetcher repo)
 
+> **STATUS 2026-06-14 (triage) — MOSTLY DONE (3 of 4).** Landed: `cli.ts` god-file split
+> (now 38 lines; thin `src/commands/` handlers + orchestration in `src/run/`, `src/discovery/`);
+> `RunSummary` moved to `src/types/run-summary.ts` (resolves the upward-import fence violation);
+> dependency-cruiser wired into `verify` (generic preset). **LIVE remaining:** the
+> external-adapters single-client decision (shared `S3Client` + `pg` built once at the
+> composition root and injected). Defer to the refactor.
+
 **Created:** 2026-06-13
 **Application:** `replays-fetcher`
 **Status:** Non-blocking. The conventions are encoded in the skill drafts; this is the code-side

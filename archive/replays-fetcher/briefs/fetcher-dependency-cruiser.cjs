@@ -1,3 +1,9 @@
+/* ARCHIVED 2026-06-14 — superseded / rejected design.
+   dependency-cruiser shipped in replays-fetcher via the generic `depcruise --init` preset
+   (live .dependency-cruiser.cjs + the `depcruise` step in the verify chain), NOT this
+   five-band F1–F8 fence draft — none of its rule names exist in the live config.
+   Kept for provenance (records the rejected approach). Do not adopt. */
+
 /**
  * replays-fetcher — dependency-cruiser boundary preset (draft)
  *

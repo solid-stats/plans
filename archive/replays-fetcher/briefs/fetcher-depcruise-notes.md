@@ -1,3 +1,8 @@
+> **ARCHIVED 2026-06-14.** Companion to the superseded `fetcher-dependency-cruiser.cjs`
+> draft. dependency-cruiser shipped in replays-fetcher via the generic `--init` preset, not
+> this five-band ruleset; the wiring steps + predicted violations below describe the rejected
+> design. Kept for provenance.
+
 # fetcher-dependency-cruiser — wiring & judgment notes
 
 ## How to wire it
