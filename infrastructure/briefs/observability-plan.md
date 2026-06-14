@@ -25,6 +25,10 @@ The stack should run inside k3s, stay separate from the application runtime
 deploy path, and use public staging domains protected by local application
 authentication.
 
+> **Follow-on.** Giving AI agents read access to this stack over MCP (Grafana
+> metrics/dashboards, GlitchTip errors) is scoped separately in
+> [agent-mcp-access.md](agent-mcp-access.md).
+
 ## Decisions
 
 - Deploy observability into k3s, not Docker on the host.
