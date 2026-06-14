@@ -14,7 +14,7 @@ surface (API + UI) and a data/production-readiness track.
 | `replay-parser-2` | v1.0 DONE / user-verified. **Reopened for a skill-conformance refactor** (W3): most of it was written without a skill, so it is brought under `solidstats-parser-rust-*` in Phase 2 (Rust-side; not part of the TS toolchain convergence). |
 | `server-2` | v1.0 + v2.0 shipped. **v3.0 "Public API v1" complete & archived (2026-06-08, git tag `v3.0`); contract-freeze phase 19 landed and confirmed (2026-06-13)** — spec `info.version 1.0.0`, CI `contract-diff` (oasdiff breaking, `fail-on: ERR`) per PR, plus the `frozen-contract` test + `openapi:verify` staleness check inside `verify`. (No git tag literally named `1.0.0` — the freeze lives in `info.version`.) |
 | `web` | Briefs only, not started (`.planning/` empty). Unblocked by the v3.0 freeze, but **sequenced last (W1)** — backend brought to finished/parity-verified state first. **Design runs in parallel from now (W7)**, code build is Phase 4. |
-| `replays-fetcher` | v1.0 shipped/archived. **v2 "Full-Corpus Ingest Resilience" complete & archived (2026-06-12); 6/6 phases, 24/24 plans, verify green (100% coverage).** Track C de-risk spike also run & validated (see Track C). |
+| `replays-fetcher` | v1.0 shipped/archived. **v2 "Full-Corpus Ingest Resilience" complete & archived (2026-06-12); 6/6 phases, 24/24 plans, verify green (100% coverage).** Track C de-risk spike run & validated, and **Track C pilot SHIPPED — v3.0 "Track C Toolchain Convergence" complete & archived (2026-06-14); 6/6 phases (13–18), tag `v3.0`, merged to master.** Shared preset `@solid-stats/ts-toolchain` at `v0.1.3`. The pilot is the pattern source for `server-2` (Phase 2). |
 | `infrastructure` | **v2.0 "Production-Ready Infra & kubectl-native CD" SHIPPED 2026-06-13; 6/6 phases, 21/21 plans.** In-scope complete (retention applied live, cutover mechanism live-verified); only the Phase 11 **live production flip is deferred by scope** — no production namespace serving traffic yet. |
 
 ## Pre-production decisions (2026-06-12)
@@ -86,15 +86,27 @@ baseline run.
 
 **Phase 1 — parity baseline review:** human value-review of the Track 3 diff artifacts
 (per CUTOVER-MODEL, values are human-reviewed, not byte-identical). Blocking problems
-are folded into the upcoming refactor rather than fixed in isolation.
+are folded into the upcoming refactor rather than fixed in isolation. All findings —
+both parity-value divergences and engineering/operational defects surfaced by the run —
+are recorded in [PARITY-BASELINE-FINDINGS.md](PARITY-BASELINE-FINDINGS.md), routed per
+owning repo, and verified resolved at Phase 3 re-parity.
 
 **Phase 2 — refactor, in parallel (after E resolved + the fetcher pilot proves the pattern):**
 
 - `server-2` — Track C refactor onto the new skills (TS), **behavior-preserving**; the
   frozen contract stays frozen (guarded by `contract-diff` + `frozen-contract`).
+  **Decision pack:** [`server-2/.planning/DEEP-BRAINSTORM.md`](../../server-2/.planning/DEEP-BRAINSTORM.md).
 - `replay-parser-2` — refactor onto `solidstats-parser-rust-*` (Rust) (**W3**). Net-new
   vs the original plan, which treated the parser as DONE: most of it was written without
   a skill and is brought under `solidstats-parser-rust-conventions`.
+  **Decision pack:** [`replay-parser-2/.planning/DEEP-BRAINSTORM.md`](../../replay-parser-2/.planning/DEEP-BRAINSTORM.md).
+
+> **Decisions locked 2026-06-14** (from the fetcher-pilot retrospective brainstorm — read the two packs above before planning Phase 2; do NOT plan from this summary alone):
+> - **`server-2` = FULL convergence** (not partial): oxfmt + oxlint with a **blocking** type-aware async-gate + tsdown (2-entry: `server.ts` + `migrate.ts`) + dependency-cruiser + knip + lefthook. ESLint dropped. **D1 holds** (no amendment).
+> - **New prerequisite — preset `v0.1.4` pre-hardening** lands in `@solid-stats/ts-toolchain` **before** `server-2` starts: a proven-consumable build-time import gate + `.oxfmtrc` byte-mirror + type-aware setup.
+> - **Type-aware OQ resolved:** `oxlint-tsgolint` installs clean via pnpm (no allowBuilds, frozen-lockfile-safe) and catches `no-floating-promises`/`require-await` with exit 1 — so type-aware can be a **blocking** gate, not non-blocking. This closes the MANIFEST "re-validate tsgolint per repo before cutover" caveat at the mechanism level; per-repo rule-set tuning still applies.
+> - **`replay-parser-2` = GSD process only** (Rust skill-conformance; **no** TS toolchain transfers), run **v1.1 in parallel now**.
+> - Naming note: the shared preset shipped as **`@solid-stats/ts-toolchain`** (tags `v0.1.0`–`v0.1.3`), not the working name `@solidstats/config` used below.
 
 **Phase 3 — parity completion:** re-run parity after the refactor. Because the baseline
 was taken pre-refactor (Phase 0 Track 3), a regression is now distinguishable from an

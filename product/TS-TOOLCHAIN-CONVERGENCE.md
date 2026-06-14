@@ -1,5 +1,23 @@
 # Deep Brainstorm Brief — TS Toolchain Convergence (Vite+ / VoidZero)
 
+> **Pilot Outcome — updated 2026-06-14.** The `replays-fetcher` pilot shipped this
+> convergence (v3.0, tag `v3.0`). The shared config package shipped as
+> **`@solid-stats/ts-toolchain`** (tags `v0.1.0`–`v0.1.3`), not the working name
+> `@solidstats/config` used below. Two empirical findings **supersede** the
+> "Verified by Deep Research" / OQ-1 type-aware caveats below for any consumer that
+> repeats the pilot:
+> - **Type-aware is CI-blockable.** `oxlint-tsgolint@0.23.0` installs clean via pnpm
+>   (empty postinstall → no `allowBuilds`; platform binary is an `optionalDependency`;
+>   frozen-lockfile-safe) and flags `no-floating-promises`/`require-await` with exit 1.
+>   So `oxlint --type-aware` can be a **blocking** gate, not non-blocking. The fetcher
+>   kept it non-blocking only due to a now-disproven install assumption.
+> - **`server-2` is a full convergence** (oxlint + blocking type-aware + tsdown 2-entry +
+>   depcruise/knip + lefthook), gated on a **preset `v0.1.4` pre-hardening** step.
+>
+> Live decision packs: [`server-2/.planning/DEEP-BRAINSTORM.md`](../../server-2/.planning/DEEP-BRAINSTORM.md),
+> [`replay-parser-2/.planning/DEEP-BRAINSTORM.md`](../../replay-parser-2/.planning/DEEP-BRAINSTORM.md).
+> The OQ-1/OQ-1b/OQ-1c type-aware open questions below are **resolved** by the pilot.
+
 ## Context
 - Date: 2026-06-07
 - Request: Migrate `replays-fetcher` and `server-2` to the Vite+/VoidZero ecosystem,
