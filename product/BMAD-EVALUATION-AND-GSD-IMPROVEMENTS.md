@@ -9,6 +9,9 @@
   (`github.com/bmad-code-org/BMAD-METHOD`)?
 - Scope: product-wide — affects the GSD workflow and the shared `solidstats-*` skill
   family used across `server-2`, `replays-fetcher`, `replay-parser-2`, and `web`.
+- Related: this doc is about *which framework* and the *review/planning process*. For
+  tuning the GSD *tooling* already installed (capabilities, gates, MemPalace, knowledge
+  graph, intel, per-repo) see [`GSD-IMPROVEMENTS.md`](GSD-IMPROVEMENTS.md).
 
 BMAD facts below were verified against primary sources (the live repo, its `docs/`,
 `package.json`, releases, and tracked issues) at the date above. BMAD moves fast, so
