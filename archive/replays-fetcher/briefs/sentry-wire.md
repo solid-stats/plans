@@ -1,5 +1,7 @@
 # replays-fetcher — Sentry/GlitchTip wire brief (errors-only, CronJob)
 
+> **ARCHIVED (2026-06-15) · DONE.** Wired (PRs #1 + #2, merged) with CronJob-safe `await flushSentry()` on every exit path; convention-reviewed (APPROVE); activated on staging (image `205b4cd`; CronJob picks up `SENTRY_DSN` on its next run). Reports to its own project `staging/replays-fetcher` (id 3). DSN model is now **per-app project / per-env org** — see `infrastructure/docs/error-sdk-handoff.md`.
+
 **Owner:** replays-fetcher repo · **Source:** infrastructure Phase 18 · **DSN handoff:** `infrastructure/docs/error-sdk-handoff.md`
 
 Wire an **errors-only** Sentry SDK reporting to GlitchTip. Infra already injects `SENTRY_DSN` (from

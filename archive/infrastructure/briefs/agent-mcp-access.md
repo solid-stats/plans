@@ -1,5 +1,11 @@
 # Agent MCP Access to the Observability Stack
 
+> **ARCHIVED (2026-06-15) · DONE.** Both MCPs registered (user scope, `~/.claude.json`) and verified connected/reading from an agent session:
+> - **GlitchTip MCP** — `GLITCHTIP_ENABLE_MCP=True` set on the `glitchtip-web` container (infra PR #2, merged + deployed); registered as an HTTP MCP at `errors.solid-stats.ru/mcp` with a GlitchTip API token. Lists projects + issues.
+> - **Grafana MCP** — **Grafana is now PUBLIC at `grafana.solid-stats.ru`** (the "internal-only / port-forward" finding below is superseded). Registered `mcp/grafana` as a docker **stdio** MCP with `GRAFANA_URL=https://grafana.solid-stats.ru` + a Viewer service-account token and `-t stdio`. Gotcha: pass the env directly as `docker run -e KEY=value …` — claude's own `-e` did NOT propagate into the container (that was the initial "Failed to connect"). Reads datasources (Loki + Prometheus) + dashboards.
+>
+> Open questions resolved: Grafana has a public domain now; tokens live in `~/.claude.json` (user scope); production agent access deferred until the prod observability stack exists. Notes below kept for history.
+
 Follow-on to [observability-plan.md](observability-plan.md). Goal: give AI agents
 (Claude Code, running locally for now) read access to the self-hosted
 observability stack over MCP — Grafana for metrics and dashboards, GlitchTip for

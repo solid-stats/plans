@@ -1,5 +1,7 @@
 # server-2 — Sentry/GlitchTip wire brief (errors-only)
 
+> **ARCHIVED (2026-06-15) · DONE.** Wired (PR #19, merged), convention-reviewed (the review caught a real bug: `instrument.ts` imported before `dotenv/config` → `SENTRY_DSN` was undefined via the `.env` path; fixed), and **activated on staging** (image `e31b129` carries the SDK; `SENTRY_DSN` confirmed in the pod). Reports to its own GlitchTip project `staging/server-2` (id 2). **DSN model changed:** one GlitchTip **project per app**, one **org per environment** (`staging`/`production`) — supersedes the single shared `solidstats/staging` project referenced below. See `infrastructure/docs/error-sdk-handoff.md`.
+
 **Owner:** server-2 repo · **Source:** infrastructure Phase 18 · **DSN handoff:** `infrastructure/docs/error-sdk-handoff.md`
 
 Wire an **errors-only** Sentry SDK reporting to the self-hosted GlitchTip. Infra already injects the

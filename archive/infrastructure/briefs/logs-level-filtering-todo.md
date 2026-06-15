@@ -1,7 +1,9 @@
 # TODO: proper log-level filtering in the Loki logs dashboard
 
 **Source:** infrastructure observability (Phase 15 logs + the Grafana "Logs (Loki)" dashboard).
-**Status:** working stopgap shipped; proper structured filtering still to do.
+**Status:** ARCHIVED (2026-06-15) — RESOLVED (infra PR #3).
+
+> **Resolution.** Implemented options 1 + 2: the dashboard `Min level` variable now uses real ordered LogQL label filters on `level`/`detected_level` (substring regex gone), and the Alloy pipeline (`80-alloy.yaml`) parses server-2's pino JSON and maps its NUMERIC level (10/20/30/40/50/60 → trace/debug/info/warn/error/fatal) to a **structured-metadata** `level` field. Verified live in Loki: server-2 lines now carry `level=info` (no longer `detected_level: unknown`); `| level=~"warn|error|fatal|critical"` discriminates cleanly (info=1092, warn+=0 over 1h) with no message-text false positives. Acceptance met. Notes below kept for history.
 
 ## What exists now (the stopgap)
 

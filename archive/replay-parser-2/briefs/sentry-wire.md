@@ -1,5 +1,7 @@
 # replay-parser-2 — Sentry/GlitchTip wire brief (errors-only, Rust)
 
+> **ARCHIVED (2026-06-15) · DONE.** Wired (PR #1, merged): `sentry::init` guard at the top of `main()`, errors-only; convention-reviewed (APPROVE); activated on staging (image `72116db`; `SENTRY_DSN` confirmed in the pod). Reports to its own project `staging/replay-parser-2` (id 4). DSN model is now **per-app project / per-env org** — see `infrastructure/docs/error-sdk-handoff.md`.
+
 **Owner:** replay-parser-2 repo · **Source:** infrastructure Phase 18 · **DSN handoff:** `infrastructure/docs/error-sdk-handoff.md`
 
 Wire an **errors-only** Sentry SDK reporting to GlitchTip (Sentry-compatible). Infra already injects
