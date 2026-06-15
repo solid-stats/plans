@@ -1,7 +1,26 @@
 # Parity Baseline — Findings Register
 
 **Created:** 2026-06-13
-**Status:** open (baseline run in progress)
+**Status:** **SG parity resolved & verified on staging (2026-06-15).** Residual F9/F5/coverage open; F14 → v4.
+
+> **Phase 0 Track 3 — RESULT (verified on staging 2026-06-15).** All SG axes closed to the
+> coverage residual: games −1.5%, kills −1.1%, **deaths −1.4% (was −13%)**, players −0.3%; among
+> players whose games match exactly, deaths now match **99%** (was 63%, all-down). Three fixes
+> merged to `server-2` master + deployed (image `e31b1297`) + recalc'd:
+> **F12** `replay_timestamp` backfill from `source_replay_id` (PR #16);
+> **F13a** one-life deaths cap, ≤1/game (PR #17);
+> **deaths-counter from `raw_snapshot`** (PR #21) — root cause: the bulk full-run recalc read the
+> death counter from a **stale `parser_events` table** (no `player_counter` rows for ~90% of sg
+> replays), so counter-only deaths (null-killer/suicide/env) were dropped; fix reads from the
+> authoritative `raw_snapshot`.
+> **F13b dropped** (victim-gating refuted: unknown_deaths only 178). **F14 → v4** (no persistent
+> player UID exists/will exist — SteamID-in-replays rejected; name-change admin is the v4 vehicle).
+> PR #20 was closed (it had reverted the Sentry feature #19).
+> Full detail: `.parity-evidence/parity-baseline-20260613/PARITY-RESULT.md`.
+> **Remaining open:** **F9** (apply legacy include/exclude/excludePlayers config), **F5**
+> (orphaned `published` parse_jobs reconciler), replay-coverage gap (~34 sg replays new 2064 vs
+> legacy 2098). The individual F12/F13a rows below predate this verification — treat this block as
+> authoritative for their final state.
 
 Durable register of everything that must be fixed before the **post-refactor
 re-parity** (RELEASE-PLAN Phase 3). Findings are collected during the Phase 0
