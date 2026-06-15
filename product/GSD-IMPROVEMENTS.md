@@ -10,6 +10,13 @@ channel) across the five GSD repos and auditing per-project capability state.
 GSD operational state still lives in each repo's own `.planning/`; this doc is
 the cross-project to-do list for the tooling, nothing more.
 
+**Related:** the framework-level evaluation (why we stay on GSD vs BMAD / Spec Kit /
+OpenSpec / …) and the two process improvements borrowed from BMAD (plan provenance,
+adversarial review lenses) live in
+[`BMAD-EVALUATION-AND-GSD-IMPROVEMENTS.md`](BMAD-EVALUATION-AND-GSD-IMPROVEMENTS.md). That
+doc covers *which framework* and the *review/planning process*; this one tunes the GSD
+*tooling* already installed.
+
 ## Background
 
 - All five GSD repos (`server-2`, `infrastructure`, `replay-parser-2`,
@@ -39,6 +46,7 @@ the cross-project to-do list for the tooling, nothing more.
 | C3 | **Trim UI/AI gates on headless repos** | `ui_phase`/`ui_safety_gate`/`ui_review` and `ai_integration_phase` fire on `infrastructure`, `replay-parser-2`, `replays-fetcher` — no frontend, no AI there. Pure `plan:pre`/`verify:post` overhead. Keep ON in `server-2` (freezes the OpenAPI contract for `web`) and in `web`. | `capability set ui --gate workflow.ui_phase=false --gate workflow.ui_safety_gate=false --gate workflow.ui_review=false` (+ `--gate workflow.ai_integration_phase=false` where no AI) |
 | C4 | **Reconcile STATE.md frontmatter drift** | Every repo's STATE.md frontmatter contradicts its body + git (stale milestone/status/dates). Breaks `/gsd-progress`, resume, and next-milestone planning. | `/gsd-health` (commit/stash in-flight work first) |
 | C5 | **Refresh the intel store** | `intel` enabled and consumed at `plan:pre`, but stale/empty where it matters (e.g. `server-2` api-map/file-roles report `exists:false, stale:true`). | `intel update` |
+| C6 | **Wire graphify into the workflow** | Graphs get built (C2) but GSD never consults them — the `graphify` capability ships empty `steps`/`contributions`, so unlike `mempalace` it injects nothing at any hook. The graph stays a manual `graphify query` artifact. | Add capability `steps`/`contributions` that inject a graph query at `discuss:pre`/`plan:pre` (mirror the MemPalace recall fragment). gsd-core change, not a `--gate` (see below). |
 
 ## Per-repo notes
 
@@ -80,6 +88,33 @@ the cross-project to-do list for the tooling, nothing more.
   gate → ideal for **temporary** `workflow.tdd_mode=true` to lock parity per
   refactor wave; turn off after v3.0 ships.
 - Apply C3 (headless CLI ingest) and C2/C4.
+
+## Make graphs actually used — wire graphify in (C6)
+
+Building and naming the graph (C2) is only half the value: GSD never consults it
+on its own. The `graphify` capability ships empty `steps` and `contributions` in
+the registry, so unlike `mempalace` (which injects recall at `discuss:pre`/
+`plan:pre` and capture at phase boundaries) it contributes nothing to any
+lifecycle hook. The graph stays a query-on-demand artifact (`graphify query`,
+`graph.html`, the named `GRAPH_COMMUNITIES.md`).
+
+To make it pull weight, inject it the way GSD already injects other context:
+
+- Add a `plan:pre` (and/or `discuss:pre`) contribution that runs a graph query
+  for the phase topic and folds the result into the planner prompt — same shape
+  as the MemPalace recall fragment.
+- Optionally a `verify:post`/`execute:wave:post` step that refreshes the graph
+  (`graphify update .`, no LLM) after code changes so it never goes stale.
+
+This is the same lever as the skill-injection improvements in
+[`BMAD-EVALUATION-AND-GSD-IMPROVEMENTS.md`](BMAD-EVALUATION-AND-GSD-IMPROVEMENTS.md):
+that doc folds shared standards/learnings into GSD via `agent_skills` injection
+and the `solidstats-shared-*` skills; this is the graph equivalent — make a
+capability inject its artifact into the workflow instead of sitting idle. Key
+difference: those are skill/config changes (no fork), whereas wiring graphify
+means editing the **graphify capability descriptor** in gsd-core (the registry
+is generated from descriptors, ADR-857) — a local patch or upstream PR, not a
+project `--gate`. Until then, graphs stay manual.
 
 ## MemPalace: what it is and how to share it
 
@@ -149,9 +184,32 @@ process = one writer = no concurrency risk; both machines see the same wings
 
 ## Status
 
-- [ ] C1 MemPalace enabled (blocked on backend install)
-- [ ] C2 knowledge graph built per repo
+- [x] C1 MemPalace enabled — **done for all four GSD repos** (`server-2`,
+  `infrastructure`, `replay-parser-2`, `replays-fetcher`): `mempalace.enabled=true`,
+  7/7 hooks active, each wing seeded from `.planning/` and recall verified.
+  Note: the `replays-fetcher-fix` worktree has its own `.planning/config.json`
+  and is **not** enabled — decide which worktree is canonical first.
+- [x] C2 knowledge graph built per repo — **code-only graphs** in all 4 repos
+  (`graphify` needs the external `graphifyy` backend, installed via pipx;
+  legitimacy verified — "SUS" was a false positive from the deliberate
+  `graphify`→`graphifyy` PyPI name reclaim). Communities **named without an LLM
+  key** (self-named by reading member symbols): server-2 88, replays-fetcher 47,
+  infrastructure 22, replay-parser-2 14 (parser-core only — `merge-graphs` hit a
+  networkx bug; whole-`crates` extract blocked by a README under tests/fixtures).
+  Names live in `.planning/graphs/` (`.graphify_labels.json`, `graph.json`
+  `community_names`, named `graph.html`, `GRAPH_COMMUNITIES.md`). Caveat: docs
+  excluded (code-only); a full semantic graph needs an LLM backend key.
+  `graphify-out/` gitignored per repo.
 - [ ] C3 UI/AI gates trimmed on headless repos
 - [ ] C4 STATE.md frontmatter reconciled
 - [ ] C5 intel refreshed
-- [ ] MemPalace backend deployed (trial: local; target: VPS service in `infrastructure`)
+- [ ] C6 graphify wired into the workflow — inject a graph query at
+  `discuss:pre`/`plan:pre` via capability `steps`/`contributions` (needs a
+  gsd-core descriptor patch, ADR-857; see the C6 section). Related to the
+  injection lever in `BMAD-EVALUATION-AND-GSD-IMPROVEMENTS.md`.
+- [~] MemPalace backend — **local trial up**: installed in an isolated venv,
+  MCP server registered at user scope (Claude reports Connected), `server-2`
+  wing seeded from `.planning/` (188 files → ~3.1k drawers); semantic recall
+  verified. Remaining target: the shared VPS service in `infrastructure`
+  (current local server is stdio/single-machine; SSE not in this build —
+  bridge with `mcp-proxy` for the VPS).
