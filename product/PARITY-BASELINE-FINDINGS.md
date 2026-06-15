@@ -17,9 +17,31 @@
 > player UID exists/will exist — SteamID-in-replays rejected; name-change admin is the v4 vehicle).
 > PR #20 was closed (it had reverted the Sentry feature #19).
 > Full detail: `.parity-evidence/parity-baseline-20260613/PARITY-RESULT.md`.
-> **Remaining open:** **F9** (apply legacy include/exclude/excludePlayers config), **F5**
-> (orphaned `published` parse_jobs reconciler), replay-coverage gap (~34 sg replays new 2064 vs
-> legacy 2098). The individual F12/F13a rows below predate this verification — treat this block as
+> **Remaining open (pre-2026-06-15):** F9, F5, the replay-coverage gap (~34 sg). Superseded by
+> the update below.
+>
+> **Update 2026-06-15 (eve).** **F9 closed.** Its only unimplemented piece was `excludePlayers`
+> (excludeReplays/includeReplays already shipped in F8). Landed to master as **PR #22** —
+> excludes an ambiguous callsign's per-game result from the **player leaderboard** (all-time +
+> per-rotation) only; squad_stats keep the player (legacy never excludes from squads, and squads
+> are a compared parity surface), via a per-(player,replay) flag + two entity maps in the
+> aggregation. **F5 closed.** Orphaned-`published` reconciler landed as **PR #23** — an
+> `IntervalTask` re-queues `published` jobs stale past `PARSE_JOB_STALE_AFTER_MS` (default 1h) so
+> the publisher re-publishes them; idempotent, `FOR UPDATE SKIP LOCKED`, audited via a new
+> `reconciled` history action (migration 0012). Both still need a **staging deploy + recalc** to
+> take effect (F9's leaderboard change only lands on recalc).
+>
+> **Coverage gap root-caused to the fetcher — server-2 ruled out.** Read-only staging audit:
+> 23556 replays, all from sg-zone, **all `promoted`** (0 ingest loss; staging-id count == replay-id
+> count), all parsed, **0 mission-extraction failures**; sg=2064 with **NULL-timestamp=0** (F12
+> backfill applied). The only sg-looking rows in the NULL bucket are exactly the 13 in-corpus
+> `excludeReplays` (correctly excluded, as legacy does); the 75 `published` orphans are mace/NULL
+> **re-parse** jobs (already-parsed replays), not sg; include/exclude already applied. So no sg is
+> hidden inside the corpus — the ~34 missing sg are sg.zone replays the **new fetcher never
+> discovered** (a `replays-fetcher` coverage residual, the F4 theme), not a server-2
+> classification/job defect. A full re-crawl (`replays-fetcher-fullrun-260615`, `run-once`) was
+> started 2026-06-15; **tomorrow: let it finish → recalc → re-measure sg** to confirm/close the gap.
+> The individual F12/F13a rows below predate the 2026-06-15 verification — treat this block as
 > authoritative for their final state.
 
 Durable register of everything that must be fixed before the **post-refactor
