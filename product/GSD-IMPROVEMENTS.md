@@ -209,16 +209,20 @@ process = one writer = no concurrency risk; both machines see the same wings
   `replays-fetcher`: `workflow.ui_phase/ui_review/ui_safety_gate/ai_integration_phase=false`
   (project-scoped, committed). `server-2` (frozen OpenAPI for `web`) and `web`
   keep them on.
-- [~] C4 health pass — fixed: `model_profile` "adaptive"→"quality" in all 4
-  repos (W004; "adaptive" is invalid in GSD 1.5.x), and non-canonical
-  `.planning/` docs archived to `milestones/` (W019: DEEP-BRAINSTORM.md ×2,
-  vv1.0-MILESTONE-AUDIT.md). Remaining (need the interactive GSD state machine,
-  not blind edits): server-2 STATE.md frontmatter still reads
-  `milestone: v3.0 / completed` while the active work is the Parity milestone →
-  reconcile with `/gsd-progress`; infrastructure MILESTONES.md missing the
-  archived v1.0 entry (W018) → `/gsd-health --backfill` in the repo. server-2
-  W002 (STATE prose mentions archived phase 08.1) is a true historical note,
-  left as-is.
+- [x] C4 health pass — fixed: `model_profile` "adaptive"→"quality" in all 4
+  repos (W004; invalid in GSD 1.5.x); non-canonical `.planning/` docs archived
+  to `milestones/` (W019: DEEP-BRAINSTORM.md ×2, vv1.0-MILESTONE-AUDIT.md);
+  infrastructure MILESTONES.md v1.0 backfilled (W018, via
+  `validate health --repair --backfill`). server-2 W002 (STATE prose mentions
+  archived phase 08.1) is a true historical note, left as-is.
+  **One structural residual (not auto-fixable):** server-2's STATE.md frontmatter
+  reads `milestone: v3.0 / completed` while the active work is a "Parity"
+  milestone that was opened *informally* — it has no `vX.Y` version and no entry
+  in ROADMAP's Milestones list. `state sync` only reconciles progress (it left
+  the v3.0 label, creating an inconsistent `v3.0 / verifying`), so it was
+  reverted. Proper fix: run `/gsd-new-milestone` in server-2 to formally open
+  the Parity milestone (assigns a version + ROADMAP entry); hand-editing the
+  milestone string risks breaking milestone parsing.
 - [x] C5 intel store built — `file-roles`/`api-map`/`dependency-graph`/
   `arch-decisions`/`stack` written in all 4 repos via the `gsd-intel-updater`
   agent (server-2 api-map derived from the frozen OpenAPI 1.0.0). server-2
