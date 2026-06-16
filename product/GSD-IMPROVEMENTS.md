@@ -181,6 +181,11 @@ process = one writer = no concurrency risk; both machines see the same wings
 - **graphify/intel runs are heavy** on large mature repos — run between
   milestones, not mid-execution.
 - **`/gsd-health` may rewrite STATE.md** — commit/stash in-flight work first.
+- **Config gate writes can revert in the working tree.** Setting gates via
+  `capability set --gate` / `config-set` can be reverted by a later gsd-tools or
+  agent invocation (observed on `config.json` this rollout). Persist by editing
+  `.planning/config.json` directly and committing atomically (the committed
+  state is authoritative; verify with `git show HEAD:.planning/config.json`).
 
 ## Status
 
@@ -200,16 +205,20 @@ process = one writer = no concurrency risk; both machines see the same wings
   `community_names`, named `graph.html`, `GRAPH_COMMUNITIES.md`). Caveat: docs
   excluded (code-only); a full semantic graph needs an LLM backend key.
   `graphify-out/` gitignored per repo.
-- [ ] C3 UI/AI gates trimmed on headless repos
+- [x] C3 UI/AI gates trimmed — `infrastructure`, `replay-parser-2`,
+  `replays-fetcher`: `workflow.ui_phase/ui_review/ui_safety_gate/ai_integration_phase=false`
+  (project-scoped, committed). `server-2` (frozen OpenAPI for `web`) and `web`
+  keep them on.
 - [ ] C4 STATE.md frontmatter reconciled
-- [ ] C5 intel refreshed
+- [x] C5 intel store built — `file-roles`/`api-map`/`dependency-graph`/
+  `arch-decisions`/`stack` written in all 4 repos via the `gsd-intel-updater`
+  agent (server-2 api-map derived from the frozen OpenAPI 1.0.0). server-2
+  landed via PR (master protected).
 - [ ] C6 graphify wired into the workflow — inject a graph query at
   `discuss:pre`/`plan:pre` via capability `steps`/`contributions` (needs a
   gsd-core descriptor patch, ADR-857; see the C6 section). Related to the
   injection lever in `BMAD-EVALUATION-AND-GSD-IMPROVEMENTS.md`.
-- [~] MemPalace backend — **local trial up**: installed in an isolated venv,
-  MCP server registered at user scope (Claude reports Connected), `server-2`
-  wing seeded from `.planning/` (188 files → ~3.1k drawers); semantic recall
-  verified. Remaining target: the shared VPS service in `infrastructure`
-  (current local server is stdio/single-machine; SSE not in this build —
-  bridge with `mcp-proxy` for the VPS).
+- [x] MemPalace backend — installed in an isolated venv, MCP server registered
+  at user scope (Claude reports Connected), all 4 wings seeded from `.planning/`;
+  semantic recall verified. **VPS sharing: descoped (won't do)** — MemPalace
+  stays single-machine for now (local stdio server on this machine).
