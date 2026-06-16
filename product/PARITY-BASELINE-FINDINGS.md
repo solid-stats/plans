@@ -1,7 +1,9 @@
 # Parity Baseline — Findings Register
 
 **Created:** 2026-06-13
-**Status:** **SG parity resolved & verified on staging (2026-06-15).** Residual F9/F5/coverage open; F14 → v4.
+**Status:** **SG coverage parity closed at the replay-ID level (2026-06-16).** New SG corpus
+reconciles 1:1 with the live legacy corpus — every per-rotation delta named and accepted. F9/F5
+merged but a staging redeploy is owed (OOM on first attempt — see below); F14 → v4.
 
 > **Phase 0 Track 3 — RESULT (verified on staging 2026-06-15).** All SG axes closed to the
 > coverage residual: games −1.5%, kills −1.1%, **deaths −1.4% (was −13%)**, players −0.3%; among
@@ -43,6 +45,57 @@
 > started 2026-06-15; **tomorrow: let it finish → recalc → re-measure sg** to confirm/close the gap.
 > The individual F12/F13a rows below predate the 2026-06-15 verification — treat this block as
 > authoritative for their final state.
+>
+> **Update 2026-06-16 — SG coverage parity closed at the replay-ID level (authoritative).**
+> The "~34 missing sg / re-crawl pending" note above is now resolved with per-replay data.
+>
+> *Corpus recovery.* The coverage gap root cause was confirmed: a stale `REPLAY_SOURCE_MAX_PAGES`
+> pin in the fetcher manifest truncated the **oldest** tail (sg.zone is newest-first; as it grew
+> past the cap, the earliest replays fell off the crawl). An unbounded re-crawl recovered **+95
+> replays (incl. 46 sg, earliest era 2020-08-26 … 2020-11-22)**; corpus 23556 → **23682**.
+>
+> *Deploy + measurement.* F9 (#22) + F5 (#23) were deployed to staging (image `0fe3326`) but the
+> pod **OOM-crashed**: F5's reconciler re-queued the 75 orphaned `published` jobs in one burst, the
+> parser finished them in a burst, and server-2's parse-result consumer loads a full OCAP artifact
+> into heap per result — ~75 large artifacts at once blew the 512Mi pod (no `--max-old-space-size`).
+> Rolled back to `e31b1297`. **F5 completed its one-time orphan recovery before rollback**
+> (`published` 75 → 3, `succeeded` → 23678). The authoritative `game_type` + F9 aggregates were then
+> produced by a **separate 2Gi recalc Job** (no consumer burst): all 95 new replays classified,
+> sg → **2117**. **Resolved 2026-06-16:** `0fe3326` (F9+F5) is now deployed — the server-2 pod
+> was right-sized 512Mi → 1Gi with `NODE_OPTIONS=--max-old-space-size=768` (the consumer prefetch
+> was already bounded at 10; the pod was simply under-provisioned for 10 concurrent OCAP-artifact
+> loads). Clean rollout, 0 restarts, ~155Mi steady-state; F5 drained the orphan backlog
+> (`parse_jobs` published 0 / succeeded 23681, 78 `reconciled` audit rows).
+>
+> *Methodology resolved.* The right baseline is the **live legacy parsed corpus (2111 sg today)** —
+> not the 2026-06-13 rotation-sum (`rotations_info.json` = 2098, which has no bucket before R01 and
+> predates growth), nor the all-time player count (4451 players is a different metric). The legacy
+> SG classifier reproduces the snapshot's per-rotation totals exactly for R01–R19, validating the
+> diff rule (`mission` prefix `sg*` not `sgs*`, plus `includeReplays` by name, minus the 15
+> `excludeReplays`).
+>
+> *Replay-ID reconciliation: **new 2117 = legacy 2111 + 8 − 2**.* 17 of 21 rotation windows have
+> **byte-identical SG replay-id sets**; only 4 windows differ, each fully itemized:
+> - **+8 classification (both corpora have the replays; not a coverage gap).** 4 "Red Dawn" (R06:
+>   `1662756303 1662757522 1664046446 1664046487`) + 4 "Unorthodox Methods" (R09: `1682194379
+>   1682194972 1685822864 1685822971`). Legacy stored these as `<Name>@undefined`, which broke
+>   **legacy's own** `includeReplays`-by-name match → legacy never classified them sg. The new
+>   system honors `includeReplays` correctly, so **new is the more-correct side**; legacy's output
+>   was wrong by that bug. (Note: "Nuclear Danger" was stored by legacy as `sg@nuclear_danger`, so
+>   its 2 replays in R18 matched on both sides — hence R18 Δ=0.)
+> - **−2 source-side deletion (genuine, accepted).** `1757773065` (`sg@178_jiriks_wrath_v15`,
+>   2025-09-13, R17) and `1773140513` (`sg@215_battle_for_kavala_v7`, 2026-03-10, R19). Both now
+>   return **HTTP 404** on sg.zone (a control replay returns 200) and exist only in the legacy
+>   `raw_replays` cache — the fetcher cannot re-discover them. Confirmed absent from `replays` and
+>   `ingest_staging_records`.
+> - **R00pre (pre-2020-09-14): not a difference.** The 9 earliest SG replays (recovered by the
+>   uncapped crawl) are the **identical set** on both sides; the apparent `+9` is only against the
+>   rotation-sum, which has no pre-R01 bucket. Against the live legacy corpus it is 0. Both sides
+>   also grew R20 83 → 87 since the snapshot.
+>
+> **Decision (user, 2026-06-16): replay-count parity accepted as-is.** No import of the 2 deleted
+> replays; the +8 `includeReplays` kept (new is correct) and carried as an allowlisted
+> known-difference. This closes the SG **coverage** dimension at the replay-ID level.
 
 Durable register of everything that must be fixed before the **post-refactor
 re-parity** (RELEASE-PLAN Phase 3). Findings are collected during the Phase 0
