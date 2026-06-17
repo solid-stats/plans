@@ -1,3 +1,9 @@
+> **ARCHIVED 2026-06-17 — delivered, do not plan against this.** The full-corpus ingest resilience
+> work shipped: the cap-truncation root cause was fixed (uncapped re-crawl + stop-on-all-duplicate
+> `truncated` RunStatus), a `watch` Deployment + nightly run-once CronJob are deployed to staging,
+> and SG coverage parity is CLOSED and user-accepted (corpus 23556 → 23682). Live state lives in
+> `replays-fetcher`'s own `.planning/` + `DECISIONS.md` / `TECH-DEBT.md`.
+
 # replays-fetcher v2 Milestone Brief: Full-Corpus Ingest Resilience
 
 **Created:** 2026-05-12

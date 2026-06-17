@@ -6,6 +6,12 @@
 > dependency-cruiser wired into `verify` (generic preset). **LIVE remaining:** the
 > external-adapters single-client decision (shared `S3Client` + `pg` built once at the
 > composition root and injected). Defer to the refactor.
+>
+> **Update 2026-06-17:** god-file splits are now tracked canonically in
+> `replays-fetcher/TECH-DEBT.md` (`run-once.ts` down to ~1046 lines after the `run/ingest-page.ts`
+> extraction — the 822/1073/707 counts below are a 2026-06-14 snapshot, partially superseded there).
+> The remaining open item here is still the single shared `S3Client` + `pg` client built at the
+> composition root.
 
 **Created:** 2026-06-13
 **Application:** `replays-fetcher`
@@ -69,8 +75,8 @@ into `run/`. The two other god-files travel with it: `run-once.ts` (1073 lines) 
 
 ## Rationale
 
-The depcruise preset draft (`plans/replays-fetcher/briefs/fetcher-dependency-cruiser.cjs`, notes in
-`plans/replays-fetcher/briefs/fetcher-depcruise-notes.md`) predicts exactly three violations against the current tree,
+The depcruise preset draft (`plans/archive/replays-fetcher/briefs/fetcher-dependency-cruiser.cjs`, notes in
+`plans/archive/replays-fetcher/briefs/fetcher-depcruise-notes.md`) predicts exactly three violations against the current tree,
 and only one of them is a code defect to fix:
 
 1. `evidence/s3-evidence-store.ts` → `run/types.ts` (upward) — fires F3. This is the real one; the
@@ -93,7 +99,7 @@ was passed over because it papers over a real upward dependency instead of remov
 
 - These land **at fetcher-refactor time**, after the architecture is signed off and the
   `.dependency-cruiser.cjs` preset is wired (`pnpm run deps:validate` in the `verify` chain after
-  `typecheck`, per `plans/replays-fetcher/briefs/fetcher-depcruise-notes.md`). Until then the skill ships PROPOSED and
+  `typecheck`, per `plans/archive/replays-fetcher/briefs/fetcher-depcruise-notes.md`). Until then the skill ships PROPOSED and
   layer checks in `skills/solidstats-fetcher-ts-code-review` stay pending.
 - After the `commands/` split, the F1 composition-root exemption and the F6/F7a diagnostics
   exemptions are the two remaining sign-off items in the preset; the F3 `RunSummary` fix is the
@@ -110,7 +116,7 @@ was passed over because it papers over a real upward dependency instead of remov
   coverage exclude) + the line counts (822 / 1073 / 707)
 - `skills/decisions/research/architecture-convergence.md §1` — converged five-band
   architecture, the four confirmed layout decisions, the External-adapters one-client rule
-- `plans/replays-fetcher/briefs/fetcher-depcruise-notes.md` — the three predicted current-tree
+- `plans/archive/replays-fetcher/briefs/fetcher-depcruise-notes.md` — the three predicted current-tree
   violations and which is the real fix vs. an exemption decision
 - `skills/decisions/0002-replays-fetcher-architecture.md` — the five-band architecture decision
   these follow-ups apply (encoded in `skills/solidstats-fetcher-ts-{conventions,code-review,tests}/`)

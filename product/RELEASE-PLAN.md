@@ -164,7 +164,7 @@ Not part of the `server-2` API milestone, but required before going live.
    discovery + rate limiter / bounded concurrency + ETA (drop hardcoded
    `REPLAY_SOURCE_MAX_PAGES`); (4) compact progress events; (5) source-contract
    guard tests. See
-   [replays-fetcher brief](../replays-fetcher/briefs/v2-backend-parity-and-full-run.md).
+   [replays-fetcher brief](../archive/replays-fetcher/briefs/v2-backend-parity-and-full-run.md) (archived 2026-06-17 — shipped).
 3. **infrastructure** (v2.0 — **SHIPPED 2026-06-13**, in-scope complete) —
    kubectl-native CD, retention applied live, and the cutover mechanism
    live-verified. **Deferred by scope:** the Phase 11 live production flip, so no

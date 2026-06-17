@@ -5,20 +5,27 @@
 **Application:** `infrastructure`
 **Primary role:** third implementation milestone in the cross-app sequence
 
+> **Update 2026-06-17:** infrastructure **v2.0 SHIPPED 2026-06-13** (in-scope deliverables complete;
+> only the live production flip / Phase 11 is deferred by scope). `replays-fetcher` v2 + Track C also
+> shipped, and SG coverage + value parity have been measured and accepted — see
+> `../../product/RELEASE-PLAN.md` and `../../product/PARITY-BASELINE-FINDINGS.md` (Update 2026-06-17).
+> This brief is retained as the milestone record; Phase 3 re-parity per the release plan is not yet
+> fully closed.
+
 ## Cross-App Briefs
 
 Read these sibling briefs before drafting the milestone:
 
 - `plans/archive/server-2/briefs/v2-backend-parity-and-full-run.md` (archived — shipped as server-2 v2.0)
-- `plans/replays-fetcher/briefs/v2-backend-parity-and-full-run.md`
+- `plans/archive/replays-fetcher/briefs/v2-backend-parity-and-full-run.md` (archived 2026-06-17 — shipped as replays-fetcher v2.0)
 - `plans/archive/replay-parser-2/briefs/v2-backend-parity-and-full-run.md` (archived — conditional brief, never triggered)
 - `plans/web/briefs/v2-backend-parity-and-full-run.md`
 
 ## Global Sequence
 
 1. `server-2`: parity foundation, new-stat export, recalculation report, and diff contract. **✅ shipped (v2.0).**
-2. `replays-fetcher`: resumable full-corpus ingest.
-3. `infrastructure`: controlled run orchestration, legacy snapshot, evidence storage, and runtime observability.
+2. `replays-fetcher`: resumable full-corpus ingest. **✅ shipped (v2.0).**
+3. `infrastructure`: controlled run orchestration, legacy snapshot, evidence storage, and runtime observability. **✅ shipped (v2.0; production flip deferred).**
 4. `web`: UI implementation after backend parity and API stability.
 
 `replay-parser-2` changes are conditional and should be driven by `server-2` contract findings — none arose; the parser is **DONE/verified**.
@@ -94,7 +101,7 @@ Acceptance criteria:
 
 - Run or document the command sequence that compares the legacy snapshot with the `server-2` export.
 - Store diff output with input manifests and full-run metadata.
-- Diff output separates strict failures from known `deaths.byTeamkills` differences.
+- Diff output separates strict failures from allowlisted known differences. (As of 2026-06-17 the deaths divergence is resolved — deaths parity is now +0.5%, no longer a divergence class; the carried known-difference is the **F14 identity re-partition**: legacy merges accepted renames, the new stack splits them. Deferred to v4.)
 - Diff decision remains `review_required`; no automation approves production cutover.
 
 ### Phase 5: Parity-Critical Observability

@@ -4,6 +4,9 @@
 **Application:** `replays-fetcher`
 **Status:** DRAFT — Variant A (in-house proposal). To be compared against a deep-research
 sweep of ingest/pipeline architecture practice, then converged before the skill is authored.
+**Update 2026-06-17: CONVERGED — the deep research ran, the architecture was decided in
+`skills/decisions/0002-replays-fetcher-architecture.md` and encoded in the
+`solidstats-fetcher-ts-conventions` skill. This brief is retained for decision provenance only.**
 
 > **2026-06-14, night run:** superseded in part. The deep research ran, Variant A+B converged,
 > the taxonomy was re-decided (V5), and the skills were drafted — see
