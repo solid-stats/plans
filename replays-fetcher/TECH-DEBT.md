@@ -79,3 +79,33 @@ responsibilities as separate, smaller tasks.
 
 **Priority:** medium. Pure tech debt, no functional impact; safe to schedule after the
 watch-daemon work lands (it touches `run/`).
+
+## Discovery drops the listing game-date → `discoveredAt` / `replay_timestamp` unpopulated
+
+**Recorded:** 2026-06-18 (surfaced by the golden run-once oracle on the real sg.zone corpus,
+quick `260618-b43`).
+
+**Observed.** `extractReplayRows` (`src/discovery/html.ts`) parses the mission link, world (map),
+and server-id cells but **not** the listing's "Game date" column (the 4th `<td>`, format
+`DD.MM.YYYY HH:MM`). So real sg.zone discovery never sets `candidate.discoveredAt`, and
+`staging/payload.ts#toPayload` consequently omits `discoveredAt` from `promotion_evidence`.
+Separately, the staging `replay_timestamp` column stays NULL for sg.zone rows whose filename does
+not match the `YYYY_MM_DD__HH_MM_SS__` prefix. The golden run-once test originally asserted
+`promotion_evidence.discoveredAt` was always present — true only for the hand-built fixtures in the
+other integration tests; the real captured corpus proved it absent (the oracle's first real catch).
+
+**Impact (cross-app).** `server-2` promotes `promotion_evidence` and `web` surfaces the replay date;
+without a source-derived game date the canonical replay has only the filename-prefix timestamp (when
+it matches) plus the fetcher's own `fetchedAt` (always recorded). This is a discovery-completeness
+gap, not a correctness bug — nothing is corrupted, the date is just not captured.
+
+**Fix approach.** Parse the "Game date" cell in `extractReplayRows` into an ISO timestamp and thread
+it through candidate metadata → `promotion_evidence.discoveredAt` and/or the `replay_timestamp`
+staging column. **Cross-app:** coordinate with `server-2` on which field is the canonical replay
+date (staging schema + promotion_evidence consumer) before changing the contract. Once captured,
+update the golden run-once oracle (`src/run/golden-e2e.integration.test.ts`) — it currently **pins
+the absence** (`discoveredAt` `toBeUndefined`), so the assertion must flip when discovery starts
+setting it.
+
+**Priority:** medium. Operator/UI-visible metadata gap with `server-2`/`web` blast radius — plan it
+(not an unattended fetcher-only change). Do via `gsd-quick` once the canonical-date field is agreed.
