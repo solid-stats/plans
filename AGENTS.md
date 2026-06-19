@@ -1,3 +1,11 @@
+`plans` is the central planning repository for Solid Stats — cross-project strategy (`product/`) and the per-application briefs (`<repo>/briefs/`); documentation, not code.
+
+It owns ONLY shared planning artifacts. It does NOT hold any application's operational GSD state — each app's `.planning/` (PROJECT/REQUIREMENTS/ROADMAP/STATE, phases, milestones, research) stays inside that app's own repo, and plans is not a GSD project itself. It contains no code, build, or deploy concerns.
+
+Shared, cross-repo standards live in the `skills` repo (solid-stats/skills, see `solidstats-shared-project-standards`); this file adds only what is specific to plans.
+
+---
+
 # AGENTS instructions
 
 ## What this repository is

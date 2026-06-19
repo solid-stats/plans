@@ -1,32 +1,40 @@
-# Solid Stats — plans
+# plans
 
-Central home for **product-level and strategic planning** of the Solid Stats
-product. Cross-project plans and per-application briefs live here. Day-to-day
-GSD operational state stays inside each project repo's own `.planning/`.
+**Русский** · [English](README.en.md)
 
-> Project development uses only AI agents plus the GSD workflow.
+Центральный дом продуктового и стратегического планирования **Solid Stats** —
+статистики игр сообщества [Solid Games](https://sg.zone) (ArmA 3). Здесь живут
+кросс-проектные планы и краткие постановки по каждому приложению (app-брифы).
+Это документация, не код.
 
-## Layout
+Часть многорепной платформы: бэкенд и источник правды — в `server-2`, поиск
+сырых реплеев — в `replays-fetcher`, парсинг OCAP — в `replay-parser-2`,
+веб-интерфейс — в `web`, рантайм и операции — в `infrastructure`. plans — общий
+слой стратегии над ними.
 
-| Path | Contents |
-|------|----------|
-| `product/` | Cross-project plans (entry point: [RELEASE-PLAN.md](product/RELEASE-PLAN.md)) |
-| `replay-parser-2/briefs/` | Parser app brief |
-| `replays-fetcher/briefs/` | Fetcher app brief + milestone briefs |
-| `server-2/briefs/` | Backend app brief |
-| `web/briefs/` | Web app brief + milestone brief |
-| `infrastructure/briefs/` | Infrastructure milestone briefs |
-| `archive/` | Superseded docs, kept for provenance ([archive/README.md](archive/README.md)) |
+> Solid Stats от и до строят AI-агенты по процессу
+> [GSD](https://github.com/open-gsd/gsd-core). Разработка вне GSD — вне процесса.
 
-## What is NOT here
+## Состав
 
-Each project repository keeps its own GSD operational planning in its local
-`.planning/` directory (PROJECT / REQUIREMENTS / ROADMAP / STATE, phases,
-milestones, research). GSD reads and writes those relative to the project root,
-so they must stay in the project repos. This repository is not a GSD project.
+| Путь | Содержимое |
+|------|------------|
+| `product/` | Кросс-проектные планы. Точка входа — [RELEASE-PLAN.md](product/RELEASE-PLAN.md) |
+| `<repo>/briefs/` | App-бриф и брифы вех каждого приложения |
+| `archive/` | Устаревшие документы, сохранённые для истории ([archive/README.md](archive/README.md)) |
 
-## Start here
+## Чего здесь нет
 
-- [product/RELEASE-PLAN.md](product/RELEASE-PLAN.md) — how Solid Stats 2 reaches
-  release (two converging tracks).
-- See [AGENTS.md](AGENTS.md) for conventions when adding or editing plans.
+Оперативное GSD-планирование каждого приложения (PROJECT · REQUIREMENTS ·
+ROADMAP · STATE, фазы, вехи, ресёрч) живёт в его собственном каталоге
+`.planning/` внутри репозитория этого приложения: GSD читает и пишет туда
+относительно корня проекта. Сам plans — не GSD-проект и своего `.planning/` не
+имеет.
+
+## С чего начать
+
+- [product/RELEASE-PLAN.md](product/RELEASE-PLAN.md) — как Solid Stats 2 доходит
+  до релиза (два сходящихся трека).
+- [AGENTS.md](AGENTS.md) — конвенции добавления и правки планов.
+
+## Лицензия — MIT
