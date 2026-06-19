@@ -63,7 +63,7 @@ This quality bar applies to public stats pages first, then authenticated player 
 - The UI should be simple, beautiful, and laconic.
 - Prefer dense but readable operational interfaces over marketing-heavy composition.
 - First visual system target: dense esports operations UI. The product should feel like a fast stat operations surface, not like a marketing or fan-content site.
-- Default theme is dark, with a first-class light theme available from the start.
+- The theme is dark-only; there is no light mode, matching the Solid Stats design system (which is explicitly dark-only). A light theme is out of scope.
 - Primary navigation uses a top navigation model on desktop and mobile tabs for core public stat surfaces. Authenticated/admin actions live behind account or role-aware navigation.
 - Stats overview should prefer tables, rankings, and microcharts over large dashboard charts.
 - Typography should use a distinctive but readable UI type direction, with tabular numerals or a compatible numeric face for stats, ranks, timers, and IDs.
@@ -80,7 +80,7 @@ This quality bar applies to public stats pages first, then authenticated player 
 - TanStack Query for server-state caching, prefetching, stale-while-revalidate behavior, optimistic reads where safe, and avoiding blocking reloads on back navigation.
 - TanStack Table for table state, sorting, filtering, pagination/cursor handling, and virtualization where row counts require it.
 - Nano Stores only for lightweight client state that does not belong in the URL, router state, or TanStack Query cache.
-- vanilla-extract for styling and design tokens unless a later phase documents a stronger alternative.
+- Tailwind CSS v4 for styling and design tokens — the documented stronger alternative superseding the original vanilla-extract direction. Tokens are generated into Tailwind `@theme` from the design system's `colors_and_type.css` (single source of truth); arbitrary token values (e.g. `bg-[#fff]`, `p-[7px]`) are disallowed. vanilla-extract is not used.
 - Ark UI for accessible headless primitives such as dialogs, menus, tabs, selects, tooltips, and popovers.
 - Typed ICU-capable i18n is required for RU/EN UI, pluralization, formatting, and localized metadata.
 - `openapi-typescript` for generated API types from the `server-2` OpenAPI schema.
@@ -89,7 +89,7 @@ This quality bar applies to public stats pages first, then authenticated player 
 ## Rendering, Caching, and Realtime Strategy
 
 - SEO-important public pages must return meaningful HTML before client JavaScript runs.
-- Use SSR, streaming, SSG, or ISR-style regeneration according to data freshness and framework support.
+- Public SEO pages use SSR fronted by a shared reverse-proxy cache (nginx `proxy_cache`) on the origin, with short TTL plus stale-while-revalidate (background update) and cache-lock. Build-time prerender (SSG) is reserved for the static shell only — landing frame, about, and error pages — not catalog or detail data, because public data changes continuously and TanStack Start has no runtime ISR engine (only HTTP cache headers plus manual purge).
 - Public detail pages should be renderable and indexable without relying on client-only fetching.
 - Route-level bundles must split heavy catalog, table, detail, moderation, and admin code.
 - Static assets should use long-lived immutable caching when content-hashed.
@@ -568,10 +568,10 @@ Type safety rules:
 | Router | TanStack Router |
 | Data fetching | TanStack Query |
 | Tables | TanStack Table |
-| Rendering | TanStack Start SSR for SEO-critical public pages |
-| Runtime | Node.js in Docker |
+| Rendering | TanStack Start SSR for public pages, fronted by nginx `proxy_cache` (short TTL + stale-while-revalidate + cache-lock); thin build-time prerender for the static shell only; SSE freshness overlay. Not SSG for catalog/detail: TanStack Start has no runtime ISR engine and the route space (10-100k rows, replay IDs, owner-changing slugs) is not build-time enumerable |
+| Runtime | Node.js in Docker behind an nginx reverse-proxy microcache on the origin. CDN optional and post-v1 (RU-region vendor only if ever — Western edges have weak RU presence; mostly-RU audience co-located with the origin makes edge latency a low-value gain) |
 | Realtime | SSE by default; page-specific auto/manual merge behavior |
-| Cache posture | Long public cache lifetimes plus SSE freshness and stale banners |
+| Cache posture | Long public cache lifetimes via nginx `proxy_cache` on the origin (TTL of minutes, background-update SWR, cache-lock, serve-stale-on-error) plus SSE freshness and stale banners |
 | API typing | `openapi-typescript` generated from live `server-2` Swagger/OpenAPI |
 | API client | Typed thin client over generated OpenAPI types |
 | Client state | Nano Stores |
@@ -611,3 +611,7 @@ Type safety rules:
 - Exact image evidence limits, allowed MIME types, scanning/validation behavior, and upload API contract.
 - Exact role/capability matrix for moderator, admin, and ops actions.
 - Exact seeded `server-2` E2E dataset and Playwright runtime budget for full PR matrix.
+- Exact nginx `proxy_cache` config: per-page-family TTLs, cache key (path + locale + an allowlist of shareable query params), `proxy_cache_use_stale` / `proxy_cache_background_update` / `proxy_cache_lock` tuning, and bypass rules for authenticated and no-cache routes.
+- On-demand purge for public pages affected by moderation/ingest events: choose `ngx_cache_purge` module vs key-based cache eviction, and define which `server-2` events trigger a purge (optional for v1; time TTL + SSE is the baseline).
+- `infrastructure` repo follow-up: provision the nginx reverse-proxy microcache layer in front of the `web` Node service (an nginx config concern, not a CDN-vendor selection). Revisit a RU-region CDN only post-v1, for origin offload, DDoS/TLS termination, and the far-region latency tail.
+- Single-origin SPOF: the single-region origin and its nginx cache are a single point of failure. Document the post-v1 mitigation (a second node or a CDN).
