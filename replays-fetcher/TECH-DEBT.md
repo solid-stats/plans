@@ -109,3 +109,28 @@ setting it.
 
 **Priority:** medium. Operator/UI-visible metadata gap with `server-2`/`web` blast radius — plan it
 (not an unattended fetcher-only change). Do via `gsd-quick` once the canonical-date field is agreed.
+
+## Staging dedup inserts-and-catches → spams postgres `ERROR: duplicate key` logs
+
+**Recorded:** 2026-06-19 (surfaced reading the staging postgres log stream in Loki during a
+deploy-status check — it was the *only* ERROR-level stream in the namespace over 24 h).
+
+**Observed.** Every watch cycle the staging-ingest dedup attempts an `INSERT` of each page-1
+record and relies on the unique constraint `ingest_staging_records_checksum_object_key_key` to
+reject duplicates (insert-and-catch-violation), rather than checking existence first. The app
+handles the rejection correctly — the cycle reports `duplicate 30 / failed 0 / ok:true` — but
+**postgres logs a `ERROR: duplicate key value violates unique constraint` line per rejected row**.
+At ~30 duplicates every ~21 s cycle that is ~30 ERRORs/cycle, 24/7 — the dominant (effectively
+only) ERROR stream in the `solid-stats-staging` postgres logs. Pure noise: nothing is lost or
+corrupted, but it buries any genuine postgres error and inflates log volume.
+
+**Fix approach.** Make the dedup non-throwing: `INSERT … ON CONFLICT (checksum, object_key) DO
+NOTHING` (or a `SELECT` existence check before insert). The conflict is then resolved silently in
+the DB with no ERROR log line. **This is the same root cause as the first item above** ("dedup by
+`source_replay_id` BEFORE fetching bytes"): if that pre-fetch existence check lands, no duplicate
+`INSERT` is ever attempted and this log noise disappears as a side effect — so prefer folding the
+two into one change rather than patching `ON CONFLICT` separately.
+
+**Priority:** low (cosmetic — log hygiene only, no functional impact), but trivial to clear and it
+restores signal to the postgres error log. Do via `gsd-quick` in `replays-fetcher`, ideally bundled
+with the `source_replay_id` pre-fetch dedup work.
