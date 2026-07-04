@@ -63,3 +63,23 @@ observability today rests on Loki (logs) + GlitchTip (errors) alone. This is a g
 **Priority:** medium. Not a deploy bug — the services run fine — but a real observability hole:
 there's currently no metric-based signal or alerting on the apps themselves, only logs and crash
 reports. Plan it through `infrastructure` (scrape config) plus per-app instrumentation work.
+
+## Legacy PM2 parser logs are not shipped to Loki
+
+**Recorded:** 2026-06-28.
+
+**Observed.** The legacy `sg-replay-parser` scheduler still runs under PM2, outside the current
+Kubernetes logging path. Its PM2 stdout/stderr logs are not collected by Loki, so legacy parser
+incidents require direct server access and cannot be investigated from Grafana Explore.
+
+**Fix approach.** Add an Alloy/Promtail filelog pipeline for the PM2 log files and ship them to
+Loki with stable labels such as `app=sg-replay-parser`, `service=sg-replay-parser-schedule`,
+`runtime=pm2`, and the deployment environment. Keep secrets out of the log stream and normalize
+multiline stack traces if PM2 emits them as split lines.
+
+**Acceptance.** A Loki query for the legacy scheduler returns fresh PM2 logs after a parser run,
+restart, and failure case; dashboards or saved Explore links can be used without SSHing into the
+legacy host.
+
+**Priority:** medium while the legacy parser remains production-relevant. This does not fix parser
+behavior directly, but it removes a blind spot in outage/debug investigations.
