@@ -33,7 +33,7 @@ run by a maintainer, read by no other skill, never a hard-require target.
 
 Reviewers it wraps and the layers corrections route into:
 
-| Reviewer skill (`/home/afgan0r/Projects/SolidGames/skills/`) | Conventions layer | Standards layer |
+| Reviewer skill (`solid-stats/skills` repo) | Conventions layer | Standards layer |
 |---|---|---|
 | `solidstats-server-ts-code-review` | `solidstats-server-ts-conventions` | `solidstats-shared-backend-ts-standards`, `solidstats-shared-ts-standards` |
 | `solidstats-fetcher-ts-code-review` | `solidstats-fetcher-ts-conventions` | `solidstats-shared-backend-ts-standards`, `solidstats-shared-ts-standards` |
@@ -123,7 +123,7 @@ skills-repo checkout, and keeps the raw inbox separate from the versioned journa
 - `skills/decisions/research/RECOMMENDATION.md` — backlog framing (night extras;
   migration step 5: "estesis-style review-feedback learning loop for the family"),
   size M / CAPTURE-first.
-- `plans/product/TS-TOOLCHAIN-CONVERGENCE.md` — product-doc format/tone reference.
+- `plans/archive/product/TS-TOOLCHAIN-CONVERGENCE.md` — archived product-doc format/tone reference.
 - Reviewer + standards skills wrapped (all present in the skills repo working tree):
   `skills/solidstats-server-ts-code-review`, `skills/solidstats-fetcher-ts-code-review`,
   `skills/solidstats-parser-rust-code-review`, `skills/solidstats-frontend-react-code-review`,

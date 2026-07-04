@@ -1,6 +1,10 @@
+> **ARCHIVED 2026-07-04 — initial app start brief, do not plan against this.**
+> `replays-fetcher` exists; active work now goes through the repo's own GSD
+> milestones and `plans/replays-fetcher/TECH-DEBT.md`.
+
 # replays-fetcher - GSD Project Brief
 
-**Created:** 2026-04-26  
+**Created:** 2026-04-26
 **Application:** `replays-fetcher`
 
 This document initializes the TypeScript ingest service for Solid Stats. It is one part of the product alongside `replay-parser-2`, `server-2`, and `web`.
@@ -37,7 +41,7 @@ Reliably discover and stage new replay files without corrupting `server-2` busin
 - Direct writes to `server-2` business tables.
 - Canonical identity, corrections, moderation, stats, bounty points, auth, APIs, and UI.
 - Player-submitted replay uploads in v1.
-- Full historical production import from `~/sg_stats` in v1.
+- Full historical production import from the legacy sg_stats corpus in v1.
 
 ## Architecture Decisions
 

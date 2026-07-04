@@ -1,3 +1,8 @@
+> **ARCHIVED 2026-07-04 — resolved/superseded follow-up brief, do not plan against this.**
+> Depcruise is wired in `verify`, `RunSummary` moved to `src/types/`, and command
+> composition now owns shared S3/PG clients. Remaining live debt belongs in
+> `plans/replays-fetcher/TECH-DEBT.md`.
+
 # replays-fetcher — Architecture Code Follow-ups (skill-driven, lands in the fetcher repo)
 
 > **STATUS 2026-06-14 (triage) — MOSTLY DONE (3 of 4).** Landed: `cli.ts` god-file split
@@ -122,5 +127,5 @@ was passed over because it papers over a real upward dependency instead of remov
   these follow-ups apply (encoded in `skills/solidstats-fetcher-ts-{conventions,code-review,tests}/`)
 - `skills/decisions/0005-lint-and-coverage-suppression-policy.md` — never silence a structural gate;
   why the `cli.ts` split is a split, not a `max-lines` disable
-- `plans/replays-fetcher/briefs/fetcher-architecture-conventions.md` — the Variant A architecture
+- `plans/archive/replays-fetcher/briefs/fetcher-architecture-conventions.md` — the Variant A architecture
   these follow-ups apply to

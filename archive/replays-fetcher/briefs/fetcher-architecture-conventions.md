@@ -1,3 +1,8 @@
+> **ARCHIVED 2026-07-04 — superseded design proposal, do not plan against this.**
+> The architecture decision is encoded in `solidstats-fetcher-ts-conventions`
+> and `skills/decisions/0002-replays-fetcher-architecture.md`; this file is
+> retained only for provenance.
+
 # replays-fetcher — Architecture & Conventions Skill (design proposal)
 
 **Created:** 2026-06-13

@@ -179,4 +179,4 @@ Encoded in: `solidstats-server-ts-conventions` (§A dependency rules, `layers.md
 - `skills/decisions/0001-skill-taxonomy-v5.md` — the taxonomy + the skills that encode these
   conventions (`solidstats-shared-ts-standards`, `solidstats-shared-testing-standards`, the
   `solidstats-server-ts-*` trio)
-- `plans/server-2/briefs/server-2.md` — the originating project brief, for format/scope
+- `plans/archive/server-2/briefs/server-2.md` — the archived originating project brief, for format/scope

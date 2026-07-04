@@ -1,7 +1,11 @@
+> **ARCHIVED 2026-07-04 — initial app start brief, do not plan against this.**
+> `server-2` exists; active work now goes through the repo's own GSD milestones
+> and focused follow-up briefs in `plans/server-2/briefs/`.
+
 # server-2 - GSD New Project Brief
 
-**Created:** 2026-04-24  
-**Intended command:** `$gsd-new-project --auto @../plans/server-2/briefs/server-2.md`  
+**Created:** 2026-04-24
+**Intended command:** `$gsd-new-project --auto @../plans/server-2/briefs/server-2.md`
 **Application:** `server-2`
 
 This document initializes the TypeScript backend application for Solid Stats. It is one part of the product alongside `replays-fetcher`, `replay-parser-2`, and `web`.
@@ -64,9 +68,9 @@ Provide a reliable backend source of truth that turns parsed replay data into pu
 - Supporting replay formats other than OCAP JSON.
 - Financial bounty rewards.
 - Google Forms.
-- Full historical import from `~/sg_stats` into production.
+- Full historical import from the legacy sg_stats corpus into production.
 - Versioned parse result history. v1 can overwrite derived parse results.
-- Annual/yearly nomination statistics. Legacy `src/!yearStatistics` and `~/sg_stats/year_results` are separate historical references; product support is deferred to v2.
+- Annual/yearly nomination statistics. Legacy `src/!yearStatistics` and the legacy sg_stats yearly results are separate historical references; product support is deferred to v2.
 
 ## Architecture
 

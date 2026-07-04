@@ -1,6 +1,10 @@
+> **ARCHIVED 2026-07-04 — initial app start brief, do not plan against this.**
+> `replay-parser-2` exists; active work now goes through the repo's own GSD
+> milestones, focused follow-up briefs, and `plans/replay-parser-2/TECH-DEBT.md`.
+
 # replay-parser-2 - GSD New Project Brief
 
-**Created:** 2026-04-24  
+**Created:** 2026-04-24
 **Intended command:** `$gsd-new-project --auto @../plans/replay-parser-2/briefs/replay-parser-2.md`
 **Application:** `replay-parser-2`
 
@@ -35,11 +39,11 @@ Parse OCAP JSON replays quickly and deterministically into compact server-facing
 
 ## Existing Reference Data
 
-- Current reference data lives at `~/sg_stats`.
-- `~/sg_stats/raw_replays` contains 23,473 raw replay JSON files in the current full-history corpus.
-- `~/sg_stats/lists/replaysList.json` contains 23,456 replay-list rows prepared at `2026-04-25T04:42:54.889Z`.
-- `~/sg_stats/results` contains 88,485 existing calculated result files.
-- `~/sg_stats/year_results` contains 14 legacy annual nomination output files and is a v2 reference, not ordinary v1 stats.
+- Current reference data lives in the legacy sg_stats corpus.
+- The legacy sg_stats raw replay corpus contains 23,473 raw replay JSON files in the current full-history corpus.
+- The legacy sg_stats replay list contains 23,456 replay-list rows prepared at `2026-04-25T04:42:54.889Z`.
+- The legacy sg_stats calculated results contain 88,485 existing calculated result files.
+- The legacy sg_stats yearly results contain 14 legacy annual nomination output files and are a v2 reference, not ordinary v1 stats.
 - The archive is for tests/golden validation only, not production import.
 - Example weekly result fields seen in existing data: `kills`, `killsFromVehicle`, `vehicleKills`, `teamkills`, `deaths`, `kdRatio`, `killsFromVehicleCoef`, `score`, `totalPlayedGames`, `week`, `startDate`, `endDate`.
 - Example OCAP top-level keys: `EditorMarkers`, `Markers`, `captureDelay`, `endFrame`, `entities`, `events`, `missionAuthor`, `missionName`, `playersCount`, `worldName`.
@@ -54,7 +58,7 @@ Parse OCAP JSON replays quickly and deterministically into compact server-facing
 - Successful worker parse artifacts stored in S3 and reported by artifact reference.
 - Deterministic minimal v3 artifact output.
 - Player, kill, weapon, destroyed-vehicle, and diagnostic rows needed by current Solid Stats ingestion.
-- Curated regression fixtures derived from `~/sg_stats`.
+- Curated regression fixtures derived from the legacy sg_stats corpus.
 - Historical v1 performance, artifact-size, and malformed-file acceptance evidence. The old benchmark/parity harness was retired after v1.0.
 - Structured parse errors tied to replay file/job identifiers.
 - Output schema versioning at the contract level, even though v1 may overwrite derived server results.
@@ -70,7 +74,7 @@ Parse OCAP JSON replays quickly and deterministically into compact server-facing
 - Supporting replay formats other than OCAP JSON.
 - Production Kubernetes deployment.
 - Financial rewards or payout logic.
-- Annual/yearly nomination statistics. Legacy `src/!yearStatistics` and `~/sg_stats/year_results` are historical references only in v1; product support is deferred to v2.
+- Annual/yearly nomination statistics. Legacy `src/!yearStatistics` and the legacy sg_stats yearly results are historical references only in v1; product support is deferred to v2.
 
 ## Parsing Responsibilities
 
@@ -156,7 +160,7 @@ Because `web` consumes generated API types from the `server-2` OpenAPI schema th
 
 ### Parser Core
 
-- **PARS-01**: Parser reads OCAP JSON files matching `~/sg_stats/raw_replays`.
+- **PARS-01**: Parser reads OCAP JSON files matching the legacy sg_stats raw replay corpus.
 - **PARS-02**: Parser extracts replay metadata: mission, world, author, player count, frame/time boundaries.
 - **PARS-03**: Parser extracts normalized player/entity observations.
 - **PARS-04**: Parser extracts normalized kill/death/teamkill events.
@@ -182,7 +186,7 @@ Because `web` consumes generated API types from the `server-2` OpenAPI schema th
 
 ### Validation
 
-- **TEST-01**: Golden replay fixtures are derived from `~/sg_stats`.
+- **TEST-01**: Golden replay fixtures are derived from the legacy sg_stats corpus.
 - **TEST-02**: Curated regression fixtures cover known compatibility behavior.
 - **TEST-03**: Historical v1 benchmark evidence was recorded and accepted; no active old-vs-new benchmark harness remains in post-v1 workflow.
 - **TEST-04**: Parser handles malformed/partial replay files with structured failures.
@@ -203,7 +207,7 @@ Because `web` consumes generated API types from the `server-2` OpenAPI schema th
 |----------|---------|
 | Language | Rust |
 | Replay format | OCAP JSON only |
-| Validation source | `~/sg_stats` as golden/test baseline |
+| Validation source | Legacy sg_stats corpus as golden/test baseline |
 | Performance goal | Current v1 performance accepted by product owner on 2026-05-02 |
 | Runtime modes | CLI plus worker/container mode |
 | Queue integration | RabbitMQ |

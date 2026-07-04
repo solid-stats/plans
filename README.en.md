@@ -21,7 +21,7 @@ plans is the shared strategy layer above them.
 | Path | Contents |
 |------|----------|
 | `product/` | Cross-project plans. Entry point: [RELEASE-PLAN.md](product/RELEASE-PLAN.md) |
-| `<repo>/briefs/` | Each application's app brief and milestone briefs |
+| `<repo>/briefs/` | Active app briefs and milestone briefs; completed start briefs live in the archive |
 | `archive/` | Superseded docs, kept for provenance ([archive/README.md](archive/README.md)) |
 
 ## What is NOT here
@@ -34,8 +34,8 @@ own.
 
 ## Start here
 
-- [product/RELEASE-PLAN.md](product/RELEASE-PLAN.md) — how Solid Stats 2 reaches
-  release (two converging tracks).
+- [product/RELEASE-PLAN.md](product/RELEASE-PLAN.md) — current entry point for
+  the Solid Stats 2 release plan.
 - [AGENTS.md](AGENTS.md) — conventions for adding or editing plans.
 
 ## License — MIT

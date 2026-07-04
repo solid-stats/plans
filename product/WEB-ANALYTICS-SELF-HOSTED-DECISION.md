@@ -89,10 +89,11 @@ analytics experience less focused than Plausible.
 
 - `infrastructure`: deployment brief for Plausible CE and OpenReplay, including
   backups, upgrades, TLS, storage, retention, and access control.
-- `web`: instrumentation brief for Plausible events/goals and OpenReplay
-  replay/heatmap integration, including route allowlists and data masking.
-- `product`: define the first dashboard questions that must be answerable after
-  rollout.
+- `web`: implement the public-flow instrumentation contract from
+  `product/PUBLIC-FLOWS-ANALYTICS-DECISIONS.md`, including sanitized route
+  templates, low-cardinality flow events, route allowlists, and data masking.
+- `product`: use `product/PUBLIC-FLOWS-ANALYTICS-DECISIONS.md` as the first
+  dashboard question set after rollout.
 
 ## Source Notes
 

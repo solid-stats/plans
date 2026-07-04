@@ -90,4 +90,4 @@ follow-up that lands when `solidstats-parser-rust-code-review` runs against the 
 - `skills/solidstats-parser-rust-conventions/SKILL.md §B`,
   `skills/solidstats-parser-rust-tests/SKILL.md`,
   `skills/solidstats-shared-testing-standards/SKILL.md §H` — where the policy is encoded (greppable).
-- `plans/replay-parser-2/briefs/replay-parser-2.md` — parent app brief (format/tone, product scope).
+- `plans/archive/replay-parser-2/briefs/replay-parser-2.md` — archived parent app brief (format/tone, product scope).

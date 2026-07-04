@@ -19,11 +19,11 @@ deployed). All changes left in the working tree for human review — no commit, 
   dated **Update 2026-06-17** note superseding the stale -1.4%/-13% figures (coverage 2117 =
   2111 +8 -2; value +0.5% games/kills/deaths, +0.9% players, deaths -13% -> +0.5%, zero
   non-rename player >=40 kills; F14 -> v4); marked the F9 and F5 rows Resolved/deployed.
-- `replays-fetcher/briefs/fetcher-architecture-conventions.md` — appended an **Update 2026-06-17**
+- `archive/replays-fetcher/briefs/fetcher-architecture-conventions.md` — appended an **Update 2026-06-17**
   note to the DRAFT/PENDING Status line: convergence is DONE (decided in
   `skills/decisions/0002-replays-fetcher-architecture.md`, encoded in the
   `solidstats-fetcher-ts-conventions` skill); brief retained for provenance.
-- `replays-fetcher/briefs/fetcher-architecture-code-followups.md` — fixed 4 broken depcruise
+- `archive/replays-fetcher/briefs/fetcher-architecture-code-followups.md` — fixed 4 broken depcruise
   paths (now point at `plans/archive/replays-fetcher/briefs/...`); added an **Update 2026-06-17**
   note to the STATUS block (god-file splits now tracked in `replays-fetcher/TECH-DEBT.md`,
   `run-once.ts` ~1046 lines; only the single shared S3/pg client item remains open).
@@ -51,7 +51,7 @@ deployed). All changes left in the working tree for human review — no commit, 
    `plans/archive/replays-fetcher/...`.
 3. `archive/web/briefs/v2-backend-parity-and-full-run.md` — Cross-App Briefs
    reference -> `plans/archive/replays-fetcher/...`.
-4-7. `replays-fetcher/briefs/fetcher-architecture-code-followups.md` (lines ~72, 73, 96, 119) —
+4-7. `archive/replays-fetcher/briefs/fetcher-architecture-code-followups.md` (lines ~72, 73, 96, 119) —
    four `plans/replays-fetcher/briefs/fetcher-dependency-cruiser.cjs` /
    `fetcher-depcruise-notes.md` references repointed to their actual location under
    `plans/archive/replays-fetcher/briefs/`.

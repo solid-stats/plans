@@ -1,3 +1,8 @@
+> **ARCHIVED 2026-07-04 — delivered decision pack, do not plan against this.**
+> The `replays-fetcher` pilot shipped the convergence and the shared package
+> shipped as `@solid-stats/ts-toolchain`. Remaining convergence work is tracked
+> in the owning repos' GSD milestones and follow-up briefs.
+
 # Deep Brainstorm Brief — TS Toolchain Convergence (Vite+ / VoidZero)
 
 > **Pilot Outcome — updated 2026-06-14.** The `replays-fetcher` pilot shipped this
@@ -14,8 +19,8 @@
 > - **`server-2` is a full convergence** (oxlint + blocking type-aware + tsdown 2-entry +
 >   depcruise/knip + lefthook), gated on a **preset `v0.1.4` pre-hardening** step.
 >
-> Live decision packs: [`server-2/.planning/DEEP-BRAINSTORM.md`](../../server-2/.planning/DEEP-BRAINSTORM.md),
-> [`replay-parser-2/.planning/DEEP-BRAINSTORM.md`](../../replay-parser-2/.planning/DEEP-BRAINSTORM.md).
+> Live decision packs: [`server-2/.planning/milestones/DEEP-BRAINSTORM.md`](../../../server-2/.planning/milestones/DEEP-BRAINSTORM.md),
+> [`replay-parser-2/.planning/milestones/DEEP-BRAINSTORM.md`](../../../replay-parser-2/.planning/milestones/DEEP-BRAINSTORM.md).
 > The OQ-1/OQ-1b/OQ-1c type-aware open questions below are **resolved** by the pilot.
 
 ## Context

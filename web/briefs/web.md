@@ -138,11 +138,23 @@ request-author flows, then moderator/admin workflows.
 
 The first launch slice prioritizes public stats quality first, while still treating the authenticated request loop and admin/ops screens as launch-blocking v1 work.
 
-Public stats implementation priority:
+Public stats implementation priority is split into the evidence-loop priority
+and the separate commander public track. The canonical public flow and analytics
+contract lives in `product/PUBLIC-FLOWS-ANALYTICS-DECISIONS.md`.
 
-1. Player and squad lists/profiles.
-2. Commander-side stats.
-3. Bounty stats and leaderboards.
+Evidence-loop priority:
+
+1. Player leaderboard -> player profile -> score formula/provenance and
+   replay/bounty evidence.
+2. Squad leaderboard -> squad profile -> rotation-scoped squad players
+   leaderboard -> player profile -> replay/bounty evidence.
+3. Replays list -> replay detail -> participant/player profile ->
+   replay/bounty evidence.
+4. Direct SEO entry -> player, squad, or replay detail -> visible next steps
+   back into leaderboard, squad, replay, or evidence loops.
+
+Commander-side stats remain a v1 public track, but are not ranked inside the
+evidence-loop priority.
 
 ### Public Pages
 
@@ -154,6 +166,7 @@ Public stats implementation priority:
 - Rotation pages or rotation filter views.
 - Commander-side stats.
 - Bounty stats/leaderboards.
+- Public replay list/catalog.
 - Public replay detail pages.
 
 ### Authenticated Request Author Pages
@@ -245,6 +258,11 @@ This journey is a launch-blocking UX requirement:
   effective games, and the adjusted-score formula where data exists.
 - Bounty points should include formula breakdown where data exists, including
   victim adjusted score, multiplier, points, replay, and rotation context.
+- Score proof is aggregate/formula based in v1. Do not expose a full kill
+  ledger as score proof in v1.
+- Public bounty and replay evidence links should include a replay link plus
+  timing in the replay. When an event row exists, link directly to that event
+  anchor.
 - Public player/profile surfaces must not imply account ownership of nickname
   or stat history. Discord identity, staff identity, request ids, moderation
   notes, attachments, and correction operation chains are never public.
@@ -254,6 +272,7 @@ This journey is a launch-blocking UX requirement:
 
 ### Replay Pages
 
+- Replay list/catalog pages are public and support the replay discovery flow.
 - Replay detail pages are public and indexable.
 - Replay pages should server-render summary and participant context first.
 - Timeline/event data should load progressively so replay pages keep good LCP and avoid excessive initial HTML.
@@ -264,6 +283,10 @@ This journey is a launch-blocking UX requirement:
 ### Requests and Moderation
 
 - Auth-gated actions use inline login prompts and return the user to the original flow after Discord OAuth.
+- Public correction entrypoints are contextual by default: player, replay,
+  event, and provenance surfaces show actions only where they can carry linked
+  entity context. A general fallback action belongs in the authenticated request
+  list.
 - Request creation UI is context-guided: replay and player pages show
   user-friendly actions, which map to backend request types
   `event_correction`, `identity_merge`, `identity_split`,
@@ -440,6 +463,15 @@ This journey is a launch-blocking UX requirement:
 - Provides request entrypoints from key events where a correction may be submitted.
 - Mobile uses grouped timeline sections; desktop uses dense event tables with filters.
 
+### Replay List
+
+- Public and fast.
+- Supports replay discovery and the player evidence loop.
+- Opens replay detail while preserving list filters, sorting, cursor, scroll
+  position, and cached data on Back.
+- Uses server-driven filtering, sorting, and cursor pagination.
+- Avoids indexable crawl traps for volatile search/filter/cursor URLs.
+
 ### Request Submission
 
 - User starts from a replay/player context where possible, or from a fallback
@@ -548,9 +580,24 @@ Type safety rules:
 - **STAT-10**: Opening a detail page and pressing Back restores the previous list/table state, scroll position, virtualized row position, and cached data without a blocking reload.
 - **STAT-11**: Real-time SSE updates can arrive while the user is on a stats list without causing CLS or unexpected viewport movement.
 - **STAT-12**: Public visitor can open indexable replay detail pages.
+- **STAT-12a**: Public visitor can search/filter replay list/catalog pages and
+  open replay details as part of the evidence loop.
+- **STAT-12b**: Direct SEO or external entry to player, squad, or replay detail
+  pages exposes visible next steps back into leaderboard, squad, replay, or
+  evidence loops.
 - **STAT-13**: Player and squad routes use slug-only current-owner resolution.
 - **STAT-14**: Public table filtering, sorting, and cursor pagination are server-driven for 10k-100k row scale.
 - **STAT-15**: Public UI displays provenance, unknown/conflict states, and stale-data warnings where applicable.
+- **STAT-16**: Public-flow analytics use sanitized route templates,
+  low-cardinality flow events, and safe enum properties only; analytics and
+  OpenReplay must not capture raw slugs, nicknames, replay IDs, event IDs,
+  request IDs, Discord IDs, search text, notes, attachment metadata, or
+  destination URLs.
+- **STAT-17**: OpenReplay is allowlisted/masked for approved public routes only
+  until authenticated request, moderator, and admin privacy controls are
+  explicitly accepted.
+- **STAT-18**: v1 does not emit active experiment events; public analytics
+  measure session activation and aggregate demand, not true D1/D7 retention.
 
 ### Authenticated Request Author UX
 
@@ -662,10 +709,11 @@ Type safety rules:
 | Public table model | Server-driven filtering, sorting, cursor pagination for 10k-100k row scale |
 | Public stat scopes | `sg` all-time + rotations; `mace`/`sm` all-time only; no mixed `all` leaderboard |
 | Primary score | Adjusted score sorted by `adjustedScore desc`; raw score is secondary; K/D is supporting |
-| Launch priority | Public player/squad stats, then commander stats, then bounty |
+| Launch priority | Evidence-loop priority: player, squad, replay, and direct SEO loops; bounty and commander are separate v1 public tracks |
 | Bounty | SG-only, player-victim focused, total bounty plus top contributing kills |
-| Replay pages | Public, indexable, summary SSR plus progressive timeline/events |
-| Request flows | Context-guided UI mapped to `event_correction`, `identity_merge`, `identity_split`, `commander_result_correction`, `commander_assignment_correction` |
+| Replay pages | Public replay list/catalog plus indexable replay details, summary SSR, progressive timeline/events, and replay/timing evidence anchors |
+| Public analytics | Flow-level session activation via Plausible plus public-route OpenReplay diagnostics; see `product/PUBLIC-FLOWS-ANALYTICS-DECISIONS.md` |
+| Request flows | Context-guided UI mapped to `event_correction`, `identity_merge`, `identity_split`, `commander_result_correction`, `commander_assignment_correction`; contextual public CTAs plus a request-list fallback |
 | Request drafts | Deferred from v1 |
 | Moderation | Risk-plus-age queue, immutable audit timeline, `needs_info` via external Discord follow-up, no bulk decisions v1 |
 | Admin/ops | Requests, roles, rotations, and limited ops actions are launch-blocking |

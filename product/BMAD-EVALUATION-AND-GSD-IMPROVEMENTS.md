@@ -208,6 +208,6 @@ other skills/agents.
 - Skills grounded against: `skills/solidstats-shared-review-standards`,
   `skills/solidstats-server-ts-code-review`, and the four reviewer skills.
 - Format/tone reference: `product/SKILLS-REVIEW-FEEDBACK-TIER.md`,
-  `product/TS-TOOLCHAIN-CONVERGENCE.md`.
+  `archive/product/TS-TOOLCHAIN-CONVERGENCE.md`.
 </content>
 </invoke>

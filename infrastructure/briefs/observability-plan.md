@@ -27,7 +27,7 @@ authentication.
 
 > **Follow-on.** Giving AI agents read access to this stack over MCP (Grafana
 > metrics/dashboards, GlitchTip errors) is scoped separately in
-> [agent-mcp-access.md](agent-mcp-access.md).
+> [`archive/infrastructure/briefs/agent-mcp-access.md`](../../archive/infrastructure/briefs/agent-mcp-access.md).
 
 ## Decisions
 

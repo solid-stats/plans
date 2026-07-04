@@ -6,7 +6,7 @@
 >
 > Open questions resolved: Grafana has a public domain now; tokens live in `~/.claude.json` (user scope); production agent access deferred until the prod observability stack exists. Notes below kept for history.
 
-Follow-on to [observability-plan.md](observability-plan.md). Goal: give AI agents
+Follow-on to [observability-plan.md](../../../infrastructure/briefs/observability-plan.md). Goal: give AI agents
 (Claude Code, running locally for now) read access to the self-hosted
 observability stack over MCP — Grafana for metrics and dashboards, GlitchTip for
 application errors. Planning document, not a runbook.

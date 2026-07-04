@@ -62,6 +62,36 @@ product/            cross-project docs (release plan, cutover review, …)
   without an absolute path — e.g. from a sibling repo,
   `--auto @../plans/<repo>/briefs/<file>.md`.
 
+## MemPalace discovery index
+
+`mempalace-index/solidstats-plans-index.md` is the short discovery digest that
+gets mined into MemPalace wing `SolidStats`. It helps agents discover current
+planning decisions without reading every file first. It is not authoritative:
+the canonical source is always the linked `plans/...` document.
+
+Every tracked `plans` change must account for this index before the task is
+done:
+
+- Semantic product, app-brief, architecture, release, or workflow changes must
+  update `mempalace-index/solidstats-plans-index.md`.
+- Cosmetic, typo-only, archive-only, or cross-reference-only changes may leave
+  it unchanged, but the final report must say `MemPalace index unchanged`.
+- After any index update, run from the `plans` repo:
+
+  ```sh
+  mempalace mine mempalace-index --wing SolidStats --agent codex
+  ```
+
+- Verify discovery with at least one targeted search, for example:
+
+  ```sh
+  mempalace search "score bounty identity leaderboard" --wing SolidStats --results 3
+  ```
+
+Agents working from a SolidStats app repo should treat MemPalace recall from
+wing `SolidStats` as a pointer to the planning index, then open the canonical
+`plans/...` file before implementing.
+
 ## Working in the product repos
 
 When planning or executing in a project repo, that repo's `gsd-briefs/` now

@@ -20,7 +20,7 @@
 | Путь | Содержимое |
 |------|------------|
 | `product/` | Кросс-проектные планы. Точка входа — [RELEASE-PLAN.md](product/RELEASE-PLAN.md) |
-| `<repo>/briefs/` | App-бриф и брифы вех каждого приложения |
+| `<repo>/briefs/` | Активные app-брифы и брифы вех; завершённые стартовые брифы лежат в архиве |
 | `archive/` | Устаревшие документы, сохранённые для истории ([archive/README.md](archive/README.md)) |
 
 ## Чего здесь нет
@@ -33,8 +33,8 @@ ROADMAP · STATE, фазы, вехи, ресёрч) живёт в его соб�
 
 ## С чего начать
 
-- [product/RELEASE-PLAN.md](product/RELEASE-PLAN.md) — как Solid Stats 2 доходит
-  до релиза (два сходящихся трека).
+- [product/RELEASE-PLAN.md](product/RELEASE-PLAN.md) — текущая точка входа в
+  релизный план Solid Stats 2.
 - [AGENTS.md](AGENTS.md) — конвенции добавления и правки планов.
 
 ## Лицензия — MIT
