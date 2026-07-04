@@ -19,7 +19,7 @@ Read these sibling briefs before drafting the milestone:
 - `plans/archive/server-2/briefs/v2-backend-parity-and-full-run.md` (archived — shipped as server-2 v2.0)
 - `plans/archive/replays-fetcher/briefs/v2-backend-parity-and-full-run.md` (archived 2026-06-17 — shipped as replays-fetcher v2.0)
 - `plans/archive/replay-parser-2/briefs/v2-backend-parity-and-full-run.md` (archived — conditional brief, never triggered)
-- `plans/web/briefs/v2-backend-parity-and-full-run.md`
+- `plans/archive/web/briefs/v2-backend-parity-and-full-run.md` (archived — superseded by the active web app brief and product decision packs)
 
 ## Global Sequence
 

@@ -49,8 +49,8 @@ deployed). All changes left in the working tree for human review — no commit, 
    (archived 2026-06-17).
 2. `infrastructure/briefs/v2-backend-parity-and-full-run.md:13` — Cross-App Briefs reference ->
    `plans/archive/replays-fetcher/...`.
-3. `web/briefs/v2-backend-parity-and-full-run.md:13` — Cross-App Briefs reference ->
-   `plans/archive/replays-fetcher/...`.
+3. `archive/web/briefs/v2-backend-parity-and-full-run.md` — Cross-App Briefs
+   reference -> `plans/archive/replays-fetcher/...`.
 4-7. `replays-fetcher/briefs/fetcher-architecture-code-followups.md` (lines ~72, 73, 96, 119) —
    four `plans/replays-fetcher/briefs/fetcher-dependency-cruiser.cjs` /
    `fetcher-depcruise-notes.md` references repointed to their actual location under

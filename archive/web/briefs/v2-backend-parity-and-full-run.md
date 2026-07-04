@@ -1,5 +1,12 @@
 # web v2 Milestone Brief: Wait for Trusted Backend, Then Build Public Stats
 
+> **ARCHIVED 2026-07-04 — superseded, do not plan against this.**
+> Backend parity and the public API freeze shipped before web implementation.
+> Active web product scope now lives in `plans/web/briefs/web.md` plus the
+> product decision packs for score, bounty, identity/auth/requests, leaderboard
+> UX, and correction/recalculation behavior. This file is kept only as
+> historical cross-app parity sequencing provenance.
+
 **Created:** 2026-05-12
 **Intended command:** `$gsd-new-milestone --auto @../plans/web/briefs/v2-backend-parity-and-full-run.md` only after backend parity contracts stabilize
 **Application:** `web`

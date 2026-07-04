@@ -20,7 +20,7 @@ Read these sibling briefs before drafting any parser milestone:
 - `plans/server-2/briefs/v2-backend-parity-and-full-run.md`
 - `plans/replays-fetcher/briefs/v2-backend-parity-and-full-run.md`
 - `plans/infrastructure/briefs/v2-backend-parity-and-full-run.md`
-- `plans/web/briefs/v2-backend-parity-and-full-run.md`
+- `plans/archive/web/briefs/v2-backend-parity-and-full-run.md`
 
 ## Global Sequence
 

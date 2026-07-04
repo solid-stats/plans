@@ -48,7 +48,8 @@ Priority order:
 
 The main experience must preserve user context across navigation. A public visitor can open a stats/catalog view, scroll deep into a table, apply filters or sorting, open a detail page, press Back, and immediately return to the same table state and scroll position without a blocking reload or visible jump.
 
-This quality bar applies to public stats pages first, then authenticated player flows, then moderator/admin workflows.
+This quality bar applies to public stats pages first, then authenticated
+request-author flows, then moderator/admin workflows.
 
 ## Design Direction
 
@@ -58,7 +59,8 @@ This quality bar applies to public stats pages first, then authenticated player 
 - Prioritize dense but readable data, fast filtering, strong profiles, clear request flows, and efficient moderator/admin screens.
 - Use a polished gaming/esports feel without sacrificing readability or accessibility.
 - Public stats are available without login.
-- Steam login is required for requests and account-specific pages.
+- Discord login is required for correction requests, account-specific request
+  pages, moderation, and admin screens.
 - UI must support Russian and English from the start.
 - The UI should be simple, beautiful, and laconic.
 - Prefer dense but readable operational interfaces over marketing-heavy composition.
@@ -111,9 +113,9 @@ This quality bar applies to public stats pages first, then authenticated player 
 - Searches players and squads.
 - Opens player/squad/rotation/commander/bounty pages.
 
-### Player
+### Request Author
 
-- Logs in through Steam OAuth via `server-2`.
+- Logs in through Discord OAuth via `server-2`.
 - Submits correction/identity requests.
 - Uploads evidence attachments.
 - Tracks request status and moderator decisions.
@@ -122,7 +124,8 @@ This quality bar applies to public stats pages first, then authenticated player 
 
 - Reviews request queue.
 - Opens request details, evidence, linked entities, and audit context.
-- Approves/rejects with a comment.
+- Accepts/rejects/withdraws requests or sets `needs_info` with a required
+  internal note.
 - Manually fills old commander-side winner data when needed.
 
 ### Admin
@@ -153,9 +156,9 @@ Public stats implementation priority:
 - Bounty stats/leaderboards.
 - Public replay detail pages.
 
-### Authenticated Player Pages
+### Authenticated Request Author Pages
 
-- Steam OAuth login/session UI.
+- Discord OAuth login/session UI.
 - Request submission.
 - Evidence attachment upload.
 - Request status/history.
@@ -164,7 +167,7 @@ Public stats implementation priority:
 
 - Request queue.
 - Request detail/review.
-- Request approval/rejection with comment.
+- Request accept/reject/withdraw and `needs_info` review.
 - Admin role management.
 - Admin rotation management.
 - Ingest conflict/status and parser/job failure visibility through `server-2` APIs, with limited actions only for explicitly audited backend endpoints.
@@ -214,13 +217,39 @@ This journey is a launch-blocking UX requirement:
 - Mobile table baseline: compact rows with sticky context/filter controls and detail navigation.
 - Desktop table baseline: dense productivity views with a user-facing density toggle.
 
+### Public Stat Semantics
+
+- The default game type is `sg`.
+- There is no mixed `all` competitive leaderboard. Rating surfaces are scoped to
+  a selected game type.
+- `sg` supports all-time and rotation scopes. The main leaderboard surface is
+  SG all-time, including the current rotation live.
+- `mace` and `sm` are secondary add-ons and support all-time stats only in v1.
+- Player leaderboard default sort is `adjustedScore desc`.
+- The main `Score` column displays adjusted score. Raw score is secondary
+  explanatory data, shown in profile details or table tooltip/popover, not as
+  an equally prominent primary metric.
+- Do not describe the score formula as "Bayesian" in player-facing UI. Use
+  wording such as "adjusted for sample size".
+- K/D is a secondary/supporting metric, not the main ranking metric. Score is
+  primary because it rewards active play and cannot be protected by sitting out.
+- Bounty is SG-only and should not appear for `mace` or `sm` in v1.
+- Bounty is player-victim focused. Destroyed vehicles, vehicle assists, and
+  squad-effectiveness components are out of scope for bounty v1.
+
 ### Public Data Trust
 
 - Public UI should show visible provenance where available: last updated state, relevant replay/source links, unknown badges, conflict badges, and parse/status context.
 - Legacy commander-side games with unknown outcome must be shown as an explicit unknown status and be filterable.
-- Bounty points should include formula breakdown where data exists, including victim player effectiveness, squad effectiveness, and rotation context.
-- Squad effectiveness should be explainable on squad and bounty surfaces, not hidden as an opaque number.
-- Player profiles may show public-safe Steam identity state. SteamID may be displayed only in masked form, with only the last four digits visible.
+- Score explanations should show raw score, sample-size adjustment, scope mean,
+  effective games, and the adjusted-score formula where data exists.
+- Bounty points should include formula breakdown where data exists, including
+  victim adjusted score, multiplier, points, replay, and rotation context.
+- Public player/profile surfaces must not imply account ownership of nickname
+  or stat history. Discord identity, staff identity, request ids, moderation
+  notes, attachments, and correction operation chains are never public.
+- Public replay events may show only a minimal corrected marker; staff views
+  link to the full correction/recalculation chain.
 - Full nickname history is public. Squad membership history should be public as a timeline with dates and unknown gaps where available.
 
 ### Replay Pages
@@ -234,20 +263,35 @@ This journey is a launch-blocking UX requirement:
 
 ### Requests and Moderation
 
-- Auth-gated actions use inline login prompts and return the user to the original flow after Steam OAuth.
-- v1 request flows are separate guided flows for: identity, add/remove kills, add/remove teamkills, remove player from replay, and commander dispute.
+- Auth-gated actions use inline login prompts and return the user to the original flow after Discord OAuth.
+- Request creation UI is context-guided: replay and player pages show
+  user-friendly actions, which map to backend request types
+  `event_correction`, `identity_merge`, `identity_split`,
+  `commander_result_correction`, and `commander_assignment_correction`.
+- Removing a player from a replay is out of scope for v1.
 - Request forms use short steppers. They do not include a final review step.
 - Validation behavior: after submit, show validation errors and then update them live as each error is fixed.
 - Requests require guided linked entities where the request type needs them.
 - Request approval creates or confirms a correction event; `server-2` applies corrections and recalculates affected aggregates.
-- Player request drafts are `server-2` resources, not local-only state. `web` SSR prefetches drafts to avoid hydration-only form filling.
-- Drafts are created after the first meaningful edit, autosaved with debounced save/saving/error states, and expire after 7 days.
+- Request drafts, autosave, resume, and draft TTL are deferred from v1.
 - Evidence support in v1: image uploads and external links. Use moderate upload limits by default and show safe external-link handling.
 - Request UI must handle rate-limit, duplicate, cooldown, validation, and rejection states from `server-2`.
 - Request visibility is limited to the requester and staff.
-- All moderation comments are visible in request history.
+- Author-visible request history contains statuses, the author's submitted
+  payload, the author's attachments, generic status copy, and final outcome.
+  Moderator notes/comments are internal and staff-only.
 - Request status notifications are in-app only for v1.
-- Rejected requests can be reopened.
+- Final `accepted`, `rejected`, and `withdrawn` requests are not reopened by
+  ordinary user workflow. Follow-up corrections are handled as a staff action
+  or a new request.
+- `needs_info` has no in-app chat in v1. The moderator manually sets the
+  status, sees an author Discord contact card with best-effort profile/deep
+  link, and must write an internal note explaining what needs clarification.
+- Authors in `needs_info` see generic status text and the responsible
+  moderator's best-effort Discord profile link. Specific clarification happens
+  through Discord outside the product.
+- After Discord follow-up, staff may add private attachments or links to the
+  request audit context, then manually returns the request to work.
 - Request detail uses an immutable audit timeline.
 - Bulk moderation decisions are out of scope for v1.
 - Moderator queue default priority is risk plus age.
@@ -352,10 +396,12 @@ This journey is a launch-blocking UX requirement:
 
 - Current display name.
 - Nickname history.
-- Steam/account link state where public-safe.
+- Public-safe identity and correction entrypoints where relevant.
 - Current/previous squad history.
 - Rotation stats.
-- Bounty-related stats.
+- Primary adjusted score with raw score as secondary explanation.
+- K/D as a secondary/supporting metric.
+- Bounty-related stats for SG only.
 - Links to relevant replays or stat details where API supports them.
 - Mobile order: summary/header, key stats, squad/status context, then tabs for rotations, bounty, history, replay context, and provenance.
 
@@ -364,8 +410,7 @@ This journey is a launch-blocking UX requirement:
 - Current/known squad identity.
 - Historical membership view where available.
 - Squad rotation stats.
-- Squad effectiveness inputs relevant to bounty scoring.
-- Squad effectiveness is explained where it affects bounty scoring.
+- Squad context for player history and rotation views.
 
 ### Commander-Side Stats
 
@@ -376,10 +421,16 @@ This journey is a launch-blocking UX requirement:
 
 ### Bounty Stats
 
-- Per-rotation bounty leaderboards.
-- Enemy-kill based points.
+- SG-only bounty leaderboards.
+- SG all-time bounty is the sum of per-rotation bounty rows.
+- Enemy-kill based points from victim multipliers.
+- Teamkills award zero bounty.
 - Clear distinction that this is points/statistics only, not money.
-- Show why a kill was valuable where API provides data: victim player effectiveness component, squad effectiveness component, and rotation context.
+- Show why a kill was valuable where API provides data: victim adjusted score,
+  multiplier, points, replay, and rotation context.
+- Player profiles and bounty detail views should expose the top contributing
+  bounty kills; top 10 can be shown inline, with the full breakdown on a
+  paginated/detail surface.
 
 ### Replay Detail
 
@@ -391,14 +442,16 @@ This journey is a launch-blocking UX requirement:
 
 ### Request Submission
 
-- User chooses request type.
+- User starts from a replay/player context where possible, or from a fallback
+  submit-correction flow.
 - User links relevant player/replay/squad/stat where possible.
 - User writes description.
 - User uploads evidence attachments.
 - Form validates and shows upload/submit progress.
 - Success state clearly shows created request and next step.
-- Request types are separate guided flows for identity, add/remove kills, add/remove teamkills, remove player from replay, and commander dispute.
-- Drafts are loaded from `server-2`, autosaved after meaningful edits, and kept for 7 days.
+- UI actions map to `event_correction`, `identity_merge`, `identity_split`,
+  `commander_result_correction`, or `commander_assignment_correction`.
+- Request drafts/autosave are not in v1.
 - Evidence supports image uploads and external links.
 - Validation errors appear after submit, then update live as the user fixes each issue.
 
@@ -412,11 +465,20 @@ This journey is a launch-blocking UX requirement:
 ### Request Detail
 
 - Shows submitted text, attachments, linked entities, current stats/context, and audit history.
-- Moderator can approve/reject with required comment.
-- Approved corrections should make clear that `server-2` will recalculate aggregates.
-- All moderation comments are visible in request history.
+- Moderator can accept/reject/withdraw or move the request to `needs_info`
+  according to the backend status model.
+- Accepted corrections should make clear that `server-2` will materialize
+  canonical correction state and recalculate affected aggregates in background.
+- `needs_info` status change UI shows the author Discord contact card, a
+  best-effort profile/deep link, and guidance to tell the author what needs
+  clarification.
+- Moderator notes/comments and staff-added evidence are internal and staff-only.
+- Author-facing detail shows statuses, own submitted data/evidence, generic
+  `needs_info` copy when applicable, final outcome, and the responsible
+  moderator's best-effort Discord profile link when applicable.
 - Shows an immutable audit timeline.
-- Rejected requests can be reopened.
+- Staff detail links to the full correction operation and recalculation chain
+  when a request has been accepted/applied.
 
 ## API Assumptions
 
@@ -424,9 +486,8 @@ This journey is a launch-blocking UX requirement:
 
 - Public stats.
 - Player/squad/rotation/commander/bounty data.
-- Steam OAuth/session.
+- Discord OAuth/session.
 - Request creation/status.
-- Request draft creation/autosave/resume.
 - Attachment upload.
 - Moderator actions.
 - Admin roles.
@@ -456,7 +517,7 @@ Type safety rules:
 - **APP-02**: TanStack Query is configured for API data fetching and caching.
 - **APP-03**: TanStack Table is configured for table state, sorting, filtering, pagination/cursor behavior, and virtualization where needed.
 - **APP-04**: Nano Stores is configured only for lightweight client state that does not belong in URL/router/query state.
-- **APP-05**: vanilla-extract is configured for styling and design tokens.
+- **APP-05**: Tailwind CSS v4 is configured for styling and generated design tokens.
 - **APP-06**: TanStack Start supports meaningful server-rendered HTML for SEO-critical public pages.
 - **APP-07**: Route-level code splitting and preloading are configured for public catalog/detail flows.
 - **APP-08**: SSE infrastructure exists for real-time server-to-client updates.
@@ -478,6 +539,11 @@ Type safety rules:
 - **STAT-06**: Public visitor can view rotation-filtered stats.
 - **STAT-07**: Public visitor can view commander-side stats.
 - **STAT-08**: Public visitor can view bounty stats.
+- **STAT-08a**: Player leaderboards use adjusted score as the primary score,
+  expose raw score as secondary explanation, and treat K/D as a supporting
+  metric.
+- **STAT-08b**: Bounty appears only for SG, shows total bounty on leaderboards,
+  and exposes top contributing bounty kills on profile/detail surfaces.
 - **STAT-09**: Public stats list/table state is encoded in URL where shareable and restored from navigation/session state where ephemeral.
 - **STAT-10**: Opening a detail page and pressing Back restores the previous list/table state, scroll position, virtualized row position, and cached data without a blocking reload.
 - **STAT-11**: Real-time SSE updates can arrive while the user is on a stats list without causing CLS or unexpected viewport movement.
@@ -486,23 +552,30 @@ Type safety rules:
 - **STAT-14**: Public table filtering, sorting, and cursor pagination are server-driven for 10k-100k row scale.
 - **STAT-15**: Public UI displays provenance, unknown/conflict states, and stale-data warnings where applicable.
 
-### Authenticated Player UX
+### Authenticated Request Author UX
 
-- **AUTH-01**: User can start Steam OAuth login.
+- **AUTH-01**: User can start Discord OAuth login.
 - **AUTH-02**: App reflects logged-in/logged-out session state.
-- **REQ-01**: Logged-in player can submit correction/identity request.
+- **REQ-01**: Logged-in request author can submit correction/identity request.
 - **REQ-02**: Request form supports evidence attachment upload.
-- **REQ-03**: Player can view request status and decision.
-- **REQ-04**: Request submission supports guided flows for identity, add/remove kills, add/remove teamkills, remove player from replay, and commander dispute.
-- **REQ-05**: Request drafts are created, autosaved, resumed, and expired through `server-2`.
+- **REQ-03**: Request author can view request status and decision.
+- **REQ-04**: Request submission is context-guided and maps to
+  `event_correction`, `identity_merge`, `identity_split`,
+  `commander_result_correction`, and `commander_assignment_correction`.
+- **REQ-05**: Request drafts/autosave are absent from v1.
 - **REQ-06**: Request validation, duplicate, cooldown, rate-limit, and rejection states are represented with actionable UI.
-- **REQ-07**: Rejected requests can be reopened.
+- **REQ-07**: `needs_info` shows generic author-facing status copy, moderator
+  Discord profile link, and in-app status notification without an in-app chat.
 
 ### Moderation/Admin
 
 - **MOD-01**: Moderator can view request queue.
 - **MOD-02**: Moderator can review request detail and attachments.
-- **MOD-03**: Moderator can approve/reject with comment.
+- **MOD-03**: Moderator can accept/reject/withdraw or move a request to
+  `needs_info`; `needs_info` requires an internal note and shows the author
+  Discord contact card.
+- **MOD-04**: Staff can navigate from accepted request/corrected entity to the
+  full correction operation and recalculation status chain.
 - **ADMIN-01**: Admin can manage roles.
 - **ADMIN-02**: Admin can manage rotations.
 - **OPS-01**: Admin/moderator can view ingest conflicts/status and parser/job failures through `server-2` APIs.
@@ -575,23 +648,26 @@ Type safety rules:
 | API typing | `openapi-typescript` generated from live `server-2` Swagger/OpenAPI |
 | API client | Typed thin client over generated OpenAPI types |
 | Client state | Nano Stores |
-| Styling | vanilla-extract |
+| Styling | Tailwind CSS v4 with generated design tokens |
 | UI primitives | Ark UI |
 | Icons | Lucide only |
-| Auth source | Steam OAuth through `server-2` |
+| Auth source | Discord OAuth through `server-2` |
 | Public stats | Visible without login |
 | Languages | Russian and English via `/ru` and `/en` routes |
 | i18n | Typed ICU-capable i18n |
 | Design direction | Dense mobile-first esports ops |
-| Theme | Dark default with first-class light theme |
+| Theme | Dark-only |
 | Navigation | Desktop top nav; mobile tabs for core public stats |
 | Public route model | Player/squad slug-only current-owner routes; replay ID routes |
 | Public table model | Server-driven filtering, sorting, cursor pagination for 10k-100k row scale |
+| Public stat scopes | `sg` all-time + rotations; `mace`/`sm` all-time only; no mixed `all` leaderboard |
+| Primary score | Adjusted score sorted by `adjustedScore desc`; raw score is secondary; K/D is supporting |
 | Launch priority | Public player/squad stats, then commander stats, then bounty |
+| Bounty | SG-only, player-victim focused, total bounty plus top contributing kills |
 | Replay pages | Public, indexable, summary SSR plus progressive timeline/events |
-| Request flows | Identity, add/remove kills, add/remove teamkills, remove player from replay, commander dispute |
-| Request drafts | `server-2` drafts, created after meaningful edit, debounced autosave, 7-day TTL |
-| Moderation | Risk-plus-age queue, immutable audit timeline, reopen rejected requests, no bulk decisions v1 |
+| Request flows | Context-guided UI mapped to `event_correction`, `identity_merge`, `identity_split`, `commander_result_correction`, `commander_assignment_correction` |
+| Request drafts | Deferred from v1 |
+| Moderation | Risk-plus-age queue, immutable audit timeline, `needs_info` via external Discord follow-up, no bulk decisions v1 |
 | Admin/ops | Requests, roles, rotations, and limited ops actions are launch-blocking |
 | Quality priority | UX continuity, then accessibility, then SEO |
 | CI gate | Full Playwright browser/performance matrix every PR, axe, Lighthouse/budgets, bundle budgets, smoke screenshots |
@@ -607,7 +683,6 @@ Type safety rules:
 - Exact live `server-2` OpenAPI URL, generation command, generated output path, and stale-generated-types CI check.
 - Exact TanStack Query cache lifetimes per query family.
 - Exact SSE event contract, reconnect policy, event classification, and per-page merge rules.
-- Exact request draft API, autosave conflict behavior, and 7-day cleanup semantics.
 - Exact image evidence limits, allowed MIME types, scanning/validation behavior, and upload API contract.
 - Exact role/capability matrix for moderator, admin, and ops actions.
 - Exact seeded `server-2` E2E dataset and Playwright runtime budget for full PR matrix.
