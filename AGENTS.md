@@ -4,6 +4,8 @@ It owns ONLY shared planning artifacts. It does NOT hold any application's opera
 
 Shared, cross-repo standards live in the `skills` repo (solid-stats/skills, see `solidstats-shared-project-standards`); this file adds only what is specific to plans.
 
+@.agent-instructions/AGENTS.md
+
 ---
 
 # AGENTS instructions
